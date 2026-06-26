@@ -113,7 +113,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 /* ===== HERO ===== */
 .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
 .hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg video{width:100%;height:100%;object-fit:cover;opacity:.32}
+.hero-bg video,.hero-bg .vanim{width:100%;height:100%;object-fit:cover;opacity:.32}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,8,10,.7) 0%,rgba(18,10,12,.86) 55%,var(--bg) 100%),radial-gradient(80% 60% at 30% 30%,transparent,rgba(11,6,8,.7))}
 .hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;grid-template-areas:"head card" "tail card";column-gap:50px;align-items:center;padding-top:58px;padding-bottom:70px}
 .hero-head{grid-area:head}
@@ -167,7 +167,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 
 /* ===== REEL full-bleed vídeo ===== */
 .reel{position:relative;height:clamp(380px,56vw,640px);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel video,.reel .vanim{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .reel::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 90% at 50% 50%,rgba(11,6,8,.45),rgba(11,6,8,.82))}
 .reel-c{position:relative;z-index:2;padding:30px}
 .reel-c h2{font-size:clamp(30px,5.5vw,68px);color:#fff;max-width:14ch;margin:0 auto;text-shadow:0 6px 40px rgba(0,0,0,.6)}
@@ -290,7 +290,6 @@ video::-webkit-media-controls-start-playback-button,video::-webkit-media-control
 .macbook{position:relative;width:440px;max-width:92%;transform-style:preserve-3d;transform:rotateX(var(--rx,10deg)) rotateY(var(--ry,-40deg));will-change:transform;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
 .mb-screen{position:relative;width:100%;aspect-ratio:16/10;background:#0a0608;border:9px solid #170a0d;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(200,169,106,.2);overflow:hidden}
 .mb-screen video,.mb-screen img{width:100%;height:100%;object-fit:cover}
-.mb-screen .mb-still{display:none}
 .mb-screen .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:58px;height:7px;background:#170a0d;border-radius:0 0 6px 6px;z-index:3}
 .mb-screen .glare{position:absolute;inset:0;background:linear-gradient(118deg,rgba(255,255,255,.1),transparent 38%);pointer-events:none;z-index:2}
 .mb-base{width:116%;margin-left:-8%;height:15px;background:linear-gradient(180deg,#3a2024,#170a0d);border-radius:2px 2px 11px 11px;box-shadow:0 22px 34px rgba(0,0,0,.55)}
@@ -300,7 +299,7 @@ video::-webkit-media-controls-start-playback-button,video::-webkit-media-control
 .prize2-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .prize2{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .prize2 .p2media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#16090c}
-.prize2 .p2media video{width:100%;height:100%;object-fit:cover}
+.prize2 .p2media video,.prize2 .p2media .vanim{width:100%;height:100%;object-fit:cover}
 .prize2 .p2media::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,6,8,.8),transparent 55%)}
 .prize2 .p2rl{position:absolute;top:14px;left:16px;z-index:2;height:16px;opacity:.95}
 .prize2 .p2pos{position:absolute;top:12px;right:16px;z-index:2;font-family:'Fraunces',serif;font-weight:900;font-size:30px;color:var(--bone)}
@@ -415,7 +414,7 @@ video::-webkit-media-controls-start-playback-button,video::-webkit-media-control
 
 /* final */
 .final{position:relative;overflow:hidden;text-align:center;border-top:1px solid var(--border)}
-.final video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.26}
+.final video,.final .vanim{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.26}
 .final::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 90% at 50% 40%,rgba(18,10,12,.6),var(--bg) 90%)}
 .final-in{position:relative;z-index:2;padding:100px 0}
 .final h2{font-size:clamp(32px,5.2vw,64px);color:var(--bone);max-width:16ch;margin:0 auto 18px}
@@ -450,8 +449,6 @@ footer a{color:var(--wine-b)}
   /* MacBook mantém o giro 3D no mobile; mostra imagem na tela (vídeo some dentro de transform 3D no iOS) */
   .mbstage{min-height:auto;padding-bottom:4px}
   .macbook{width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
-  .mb-screen video{display:none}
-  .mb-screen .mb-still{display:block}
 }
 @media(max-width:560px){
   .ctn,.ctn-wide{padding:0 26px}.sec{padding:54px 0}.sec-head,.sec-head.center{margin-bottom:40px}
@@ -492,7 +489,7 @@ footer a{color:var(--wine-b)}
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"><video poster="assets/img/posters/v-hero.jpg" id="heroVid" src="assets/video/v-hero.mp4" autoplay muted loop playsinline></video></div>
+  <div class="hero-bg"><img class="vanim" id="heroVid" src="assets/anim/v-hero.webp" alt=""></div>
   <div class="ctn hero-in">
     <div class="hero-head rv">
       <div class="eg">
@@ -538,7 +535,7 @@ footer a{color:var(--wine-b)}
 
 <!-- REEL full-bleed -->
 <section class="reel">
-  <video autoplay poster="assets/img/posters/v-reel1.jpg" id="reelVid" src="assets/video/v-reel1.mp4" muted loop playsinline data-para="0.16"></video>
+  <img class="vanim" id="reelVid" data-para="0.16" src="assets/anim/v-reel1.webp" loading="lazy" alt="">
   <div class="reel-c rv">
     <span class="kick" style="color:var(--rose)">Olha o n&iacute;vel</span>
     <h2 class="disp">Tudo isso &eacute; <span class="it">IA</span>. Voc&ecirc; vai criar igual.</h2>
@@ -613,7 +610,7 @@ footer a{color:var(--wine-b)}
       </div>
       <div class="mbstage">
         <div class="macbook">
-          <div class="mb-screen"><span class="notch"></span><span class="glare"></span><video autoplay poster="assets/img/posters/renderlab-ui.jpg" src="assets/video/renderlab-ui.mp4" muted loop playsinline></video><img class="mb-still" src="assets/img/posters/renderlab-ui.jpg" alt="render gerado com IA"></div>
+          <div class="mb-screen"><span class="notch"></span><span class="glare"></span><img class="vanim" src="assets/anim/renderlab-ui.webp" alt="render gerado com IA"></div>
           <div class="mb-base"></div>
         </div>
       </div>
@@ -621,11 +618,11 @@ footer a{color:var(--wine-b)}
     <!-- 2º e 3º -->
     <div class="prize2-row rv">
       <div class="prize2">
-        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">2&ordm;</span><video autoplay poster="assets/img/posters/renderlab-vert.jpg" src="assets/video/renderlab-vert.mp4" muted loop playsinline></video></div>
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">2&ordm;</span><img class="vanim" src="assets/anim/renderlab-vert.webp" loading="lazy" alt=""></div>
         <div class="p2body"><div class="p2l">2&ordm; lugar</div><h3>1 ano de RenderLAB gr&aacute;tis</h3><p>O segundo melhor render leva um ano inteiro de RenderLAB pra continuar criando sem parar.</p></div>
       </div>
       <div class="prize2">
-        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">3&ordm;</span><video autoplay poster="assets/img/posters/renderlab-ui.jpg" src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">3&ordm;</span><img class="vanim" src="assets/anim/renderlab-ui.webp" loading="lazy" alt=""></div>
         <div class="p2body"><div class="p2l">3&ordm; lugar</div><h3>1 m&ecirc;s de RenderLAB gr&aacute;tis</h3><p>O terceiro lugar ganha um m&ecirc;s completo de RenderLAB pra emendar direto depois do desafio.</p></div>
       </div>
     </div>
@@ -642,7 +639,7 @@ footer a{color:var(--wine-b)}
     </div>
     <div class="jrow rv">
       <div class="jcard">
-        <div class="jmedia"><span class="jn">01</span><video autoplay poster="assets/img/posters/v-reel4.jpg" src="assets/video/v-reel4.mp4" muted loop playsinline></video></div>
+        <div class="jmedia"><span class="jn">01</span><img class="vanim" src="assets/anim/v-reel4.webp" loading="lazy" alt=""></div>
         <div class="jbody">
           <div class="jt">S&aacute;bado &middot; 1 de agosto</div>
           <h3>Seu primeiro render</h3>
@@ -654,7 +651,7 @@ footer a{color:var(--wine-b)}
         </div>
       </div>
       <div class="jcard">
-        <div class="jmedia"><span class="jn">02</span><video autoplay poster="assets/img/posters/v-reel2.jpg" src="assets/video/v-reel2.mp4" muted loop playsinline></video></div>
+        <div class="jmedia"><span class="jn">02</span><img class="vanim" src="assets/anim/v-reel2.webp" loading="lazy" alt=""></div>
         <div class="jbody">
           <div class="jt">Domingo &middot; 2 de agosto</div>
           <h3>N&iacute;vel profissional</h3>
@@ -688,19 +685,19 @@ footer a{color:var(--wine-b)}
   <div class="ctn learn rv">
     <div class="scard" style="--i:0">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/w-print.jpg" src="assets/video/w-print.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> render com IA</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/w-print.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> render com IA</div></div>
         <div class="scard-body"><div class="sn">01</div><div class="stag">A base de tudo</div><h3>Transforme um print em <span class="it">render</span></h3><p>Manda uma foto, um print do seu projeto ou um rascunho simples e a IA devolve um render fotorrealista em segundos. &Eacute; por aqui que voc&ecirc; come&ccedil;a &mdash; mesmo sem nunca ter tocado em IA.</p></div>
       </div>
     </div>
     <div class="scard rev" style="--i:1">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/w-cenas.jpg" src="assets/video/w-cenas.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> gerado com IA</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/w-cenas.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> gerado com IA</div></div>
         <div class="scard-body"><div class="sn">02</div><div class="stag">Composi&ccedil;&atilde;o</div><h3>Monte cenas que parecem <span class="it">foto</span></h3><p>Componha ambientes do zero &mdash; m&oacute;veis, materiais, pessoas e contexto &mdash; e construa cenas completas que enganam o olho. Sem modelar nada em 3D.</p></div>
       </div>
     </div>
     <div class="scard" style="--i:2">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/w-mood.jpg" src="assets/video/w-mood.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> mesma cena, outro clima</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/w-mood.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> mesma cena, outro clima</div></div>
         <div class="scard-body"><div class="sn">03</div><div class="stag">Atmosfera</div><h3>Troque o <span class="it-c">clima</span> com um clique</h3><p>Golden hour, noite, chuva, neve, primavera &mdash; a mesma cena em qualquer atmosfera, na hora. &Eacute; o controle que faz o cliente dizer "&eacute; exatamente isso".</p></div>
       </div>
     </div>
@@ -718,19 +715,19 @@ footer a{color:var(--wine-b)}
     </div>
     <div class="scard rev" style="--i:5">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/v-final.jpg" src="assets/video/v-final.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> timelapse com IA</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/v-final.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> timelapse com IA</div></div>
         <div class="scard-body"><div class="sn">06</div><div class="stag">Tempo</div><h3>Timelapse de obra em <span class="it">segundos</span></h3><p>Mostre a obra evoluindo, do terreno ao projeto pronto, num timelapse que impressiona &mdash; gerado pela IA, sem filmar nada.</p></div>
       </div>
     </div>
     <div class="scard" style="--i:6">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/w-loteamento.jpg" src="assets/video/w-loteamento.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> vista a&eacute;rea com IA</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/w-loteamento.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> vista a&eacute;rea com IA</div></div>
         <div class="scard-body"><div class="sn">07</div><div class="stag">Vista a&eacute;rea</div><h3>Mostre o <span class="it">empreendimento</span> inteiro</h3><p>Crie vistas a&eacute;reas e criativos de loteamento que mostram o projeto todo de tirar o f&ocirc;lego &mdash; o tipo de imagem que impressiona na hora.</p></div>
       </div>
     </div>
     <div class="scard rev" style="--i:7">
       <div class="scard-in">
-        <div class="scard-media"><video autoplay poster="assets/img/posters/w-narrativa.jpg" src="assets/video/w-narrativa.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> v&iacute;deo gerado com IA</div></div>
+        <div class="scard-media"><img class="vanim" src="assets/anim/w-narrativa.webp" loading="lazy" alt=""><div class="splay"><span class="d"></span> v&iacute;deo gerado com IA</div></div>
         <div class="scard-body"><div class="sn">08</div><div class="stag">Movimento</div><h3>V&iacute;deo de <span class="it">cinema</span>, sem editor</h3><p>Transforme o render num v&iacute;deo cinematogr&aacute;fico com movimento de c&acirc;mera e narrativa, pronto pra apresentar &mdash; sem abrir nenhum editor de v&iacute;deo.</p></div>
       </div>
     </div>
@@ -874,7 +871,7 @@ footer a{color:var(--wine-b)}
 
 <!-- FINAL -->
 <section class="final">
-  <video autoplay poster="assets/img/posters/v-final.jpg" id="finalVid" src="assets/video/v-final.mp4" muted loop playsinline data-para="0.16"></video>
+  <img class="vanim" id="finalVid" data-para="0.16" src="assets/anim/v-final.webp" loading="lazy" alt="">
   <div class="final-in"><div class="ctn rv">
     <span class="bdg bdg-live" style="margin-bottom:22px"><span class="d"></span> Lote 1 fechando &middot; o pre&ccedil;o s&oacute; sobe</span>
     <h2 class="disp">Voc&ecirc; vai aproveitar a <span class="it">intelig&ecirc;ncia artificial</span> ou vai apenas ver outros profissionais sa&iacute;rem na sua frente?</h2>

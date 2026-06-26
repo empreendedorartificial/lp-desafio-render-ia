@@ -26,8 +26,13 @@ public/
   assets/
     img/renders/            — galeria (g*, mood-*), pares antes/depois (ba-*), tópicos
     img/                    — logo-renderlab.png, luiz-montani.jpg
-    video/                  — v-* (reels), w-* (vídeos do workshop p/ as 10 entregas),
-                              renderlab-* (prêmios)
+    video/                  — fontes .mp4 originais (não usadas direto na página)
+    anim/                   — .webp animado (o que a página exibe). Os vídeos viraram
+                              WebP animado em <img> porque o iOS bloqueia autoplay de
+                              <video> em Modo de Pouca Energia. Imagem anima sempre,
+                              sem botão de play. Regerar: ffmpeg -i video/X.mp4
+                              -vcodec libwebp -filter:v "fps=10,scale=480:-2" -q:v 48 -loop 0 anim/X.webp
+    img/posters/            — frames-poster (fallback antigo, mantidos)
 ```
 
 ## Pendências
