@@ -35,8 +35,8 @@
   --border:rgba(236,226,214,.1);--border-w:rgba(192,57,74,.32);--border-c:rgba(200,169,106,.32);
   --r:20px;--rs:13px;
 }
-html{scroll-behavior:smooth;background:#0b0608}
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;background:#0b0608;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;overflow-x:hidden;max-width:100vw;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 img,video{display:block;max-width:100%}
 .ctn{max-width:1180px;margin:0 auto;padding:0 26px}
@@ -115,8 +115,11 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 .hero-bg{position:absolute;inset:0;z-index:0}
 .hero-bg video{width:100%;height:100%;object-fit:cover;opacity:.32}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,8,10,.7) 0%,rgba(18,10,12,.86) 55%,var(--bg) 100%),radial-gradient(80% 60% at 30% 30%,transparent,rgba(11,6,8,.7))}
-.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:50px;align-items:center;padding:64px 0 70px}
-.hero h1{font-size:clamp(40px,6vw,82px);font-weight:900;margin:20px 0 22px;color:var(--bone)}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;grid-template-areas:"head card" "tail card";column-gap:50px;align-items:center;padding:58px 0 70px}
+.hero-head{grid-area:head}
+.reveal-card{grid-area:card}
+.hero-tail{grid-area:tail;margin-top:26px}
+.hero h1{font-size:clamp(38px,5.4vw,76px);font-weight:900;margin:18px 0 0;color:var(--bone)}
 .hero .eg{display:flex;gap:11px;flex-wrap:wrap}
 .hero-sub{max-width:560px;margin-bottom:30px}
 .hero-cta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
@@ -171,7 +174,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 .reel-c p{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--rose)}
 
 /* ===== GALERIA (parede de renders) ===== */
-.wall{position:relative;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.wall{position:relative;padding:6px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .wrow{display:flex;gap:16px;width:max-content;animation:marq 60s linear infinite;margin-bottom:16px}
 .wrow.rev{animation-direction:reverse}
 .wrow.fast{animation-duration:44s}
@@ -430,20 +433,29 @@ footer a{color:var(--wine-b)}
 @media(prefers-reduced-motion:reduce){.fx-title,.fx-clip,.fx-clip>img,.fx-clip>video,.rv{clip-path:none!important;transform:none!important;opacity:1!important}}
 
 @media(max-width:920px){
-  .hero-in,.split,.jrow,.grid2{grid-template-columns:1fr;gap:34px}
+  .split,.jrow,.grid2{grid-template-columns:1fr;gap:34px}
+  .hero-in{display:flex;flex-direction:column;grid-template-areas:none;align-items:stretch;column-gap:0;padding:34px 0 52px}
+  .hero-head,.reveal-card,.hero-tail{grid-area:auto}
+  .reveal-card{max-width:100%;margin:22px 0 0}
+  .hero-tail{margin-top:24px}
   .split.rev .txt{order:0}
   .prizes,.grid3{grid-template-columns:1fr}
   .lotes{grid-template-columns:1fr}
   .host{grid-template-columns:1fr}.host-photo{aspect-ratio:16/10}.host-photo::after{background:linear-gradient(0deg,var(--bg2),transparent 60%)}.host-body{padding:0 30px 34px}
   .guar{flex-direction:column;text-align:center}
-  .reveal-card{max-width:480px;margin:0 auto}
+  /* MacBook sem 3D no mobile — vídeo some dentro de transform 3D no iOS Safari */
+  .mbstage{perspective:none;min-height:auto;padding-bottom:4px}
+  .macbook{transform:none!important;transform-style:flat;width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
 }
 @media(max-width:560px){
   .ctn,.ctn-wide{padding:0 18px}.sec{padding:54px 0}.sec-head,.sec-head.center{margin-bottom:40px}
-  .hero-in{padding:40px 0 50px}
-  .pbox .big{font-size:58px}
+  .hero-in{padding:28px 0 46px}
+  .hero h1{font-size:clamp(29px,8.4vw,42px);line-height:1.04}
+  .hero-sub{font-size:15px}.hero-meta{font-size:11.5px}
+  .pbox .big{font-size:56px}
   .reveal-card .float{display:none}
-  .topbar{font-size:10.5px;gap:8px}
+  .reveal-card{margin-top:18px}
+  .topbar{font-size:10px;gap:7px}
 }
 </style>
 </head>
@@ -473,21 +485,12 @@ footer a{color:var(--wine-b)}
 <section class="hero">
   <div class="hero-bg"><video id="heroVid" src="assets/video/v-hero.mp4" autoplay muted loop playsinline></video></div>
   <div class="ctn hero-in">
-    <div class="rv">
+    <div class="hero-head rv">
       <div class="eg">
         <span class="bdg bdg-live"><span class="d"></span> ao vivo &middot; 1 e 2 de agosto</span>
         <span class="bdg bdg-champ">&#127942; 1&ordm; lugar leva um MacBook</span>
       </div>
       <h1>Do <span class="it">zero</span> ao seu primeiro render <span class="it-c">profissional</span> &mdash; em um fim de semana.</h1>
-      <p class="hero-sub lead">Sem programa de 3D, sem V-Ray, sem PC gamer. Voc&ecirc; parte de uma <b>foto ou um print simples</b> e, com IA, cria renders de n&iacute;vel profissional &mdash; tirando anos de atraso em dois dias e competindo ao vivo por pr&ecirc;mios.</p>
-      <div class="hero-cta-row">
-        <button class="btn btn-w" style="font-size:18px;padding:18px 38px" onclick="buy()"><span class="shine"></span>Entrar no desafio <span class="sub">R$9,90</span></button>
-        <span class="hero-note">acesso imediato<br>7 dias de garantia</span>
-      </div>
-      <div class="hero-meta">
-        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 1 e 2 de agosto &middot; online e ao vivo</span>
-        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> pra quem come&ccedil;a do zero</span>
-      </div>
     </div>
     <!-- reveal sketch->render -->
     <div class="reveal-card rv">
@@ -501,6 +504,17 @@ footer a{color:var(--wine-b)}
       <div class="float f1"><img src="assets/img/renders/g02.jpg" alt=""></div>
       <div class="float f2"><img src="assets/img/renders/mood-noturna.jpg" alt=""></div>
       <div class="reveal-cap">do <b>zero</b> ao render &mdash; em ~30 segundos</div>
+    </div>
+    <div class="hero-tail rv">
+      <p class="hero-sub lead">Sem programa de 3D, sem V-Ray, sem PC gamer. Voc&ecirc; parte de uma <b>foto ou um print simples</b> e, com IA, cria renders de n&iacute;vel profissional &mdash; tirando anos de atraso em dois dias e competindo ao vivo por pr&ecirc;mios.</p>
+      <div class="hero-cta-row">
+        <button class="btn btn-w" style="font-size:18px;padding:18px 38px" onclick="buy()"><span class="shine"></span>Entrar no desafio <span class="sub">R$9,90</span></button>
+        <span class="hero-note">acesso imediato<br>7 dias de garantia</span>
+      </div>
+      <div class="hero-meta">
+        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 1 e 2 de agosto &middot; online e ao vivo</span>
+        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> pra quem come&ccedil;a do zero</span>
+      </div>
     </div>
   </div>
 </section>
