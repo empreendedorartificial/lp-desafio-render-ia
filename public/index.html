@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desafio Render com IA do Zero — 1 e 2 de agosto</title>
+<meta name="description" content="Saia do zero ao seu primeiro render profissional com IA em um fim de semana. Sem programa de 3D, sem PC gamer. Compita ao vivo por um MacBook. Lote 1 por R$9,90.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700;1,9..144,900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#120a0c;--bg2:#1a0e11;--ink:#0b0608;
+  --wine:#9b2233;--wine-d:#5e0f1c;--wine-b:#c0394a;--rose:#d98a8a;
+  --bone:#ece2d6;--bone-d:#c3b4a8;--champ:#c8a96a;
+  --text:#ece2d6;--text2:#b9a9a3;--text3:#8a7270;
+  --border:rgba(236,226,214,.1);--border-w:rgba(192,57,74,.32);--border-c:rgba(200,169,106,.32);
+  --r:20px;--rs:13px;
+}
+html{scroll-behavior:smooth;background:#0b0608}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+.ctn{max-width:1180px;margin:0 auto;padding:0 26px}
+.ctn-wide{max-width:1500px;margin:0 auto;padding:0 26px}
+
+/* grão / textura premium */
+.grain{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;background:rgba(236,226,214,.05)}
+.progress span{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--wine-d),var(--wine-b),var(--champ));box-shadow:0 0 12px rgba(192,57,74,.6)}
+.lb{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:30px;background:rgba(6,3,4,.93);backdrop-filter:blur(8px);cursor:zoom-out}
+.lb.on{display:flex;animation:lbin .25s ease}
+@keyframes lbin{from{opacity:0}to{opacity:1}}
+.lb img{max-width:94vw;max-height:90vh;border-radius:12px;border:1px solid var(--border-w);box-shadow:0 40px 120px rgba(0,0,0,.7)}
+.lb-x{position:absolute;top:20px;right:30px;color:var(--bone);font-size:40px;line-height:1;cursor:pointer;opacity:.65}
+.lb-x:hover{opacity:1}
+.wt[data-full]{cursor:zoom-in}
+.gallery-hint{text-align:center;margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:9px}
+.gallery-hint b{color:var(--wine-b)}
+.gallery-hint svg{width:15px;height:15px;stroke:var(--wine-b);fill:none}
+/* glows de fundo */
+.bg-fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:radial-gradient(120% 80% at 50% -8%,#22090e 0,#120a0c 46%,#0a0507 100%)}
+.glow{position:absolute;border-radius:50%;filter:blur(130px);opacity:.55;will-change:transform}
+.g1{width:640px;height:640px;background:rgba(155,34,51,.3);top:-12%;left:-10%;animation:dr1 30s ease-in-out infinite}
+.g2{width:520px;height:520px;background:rgba(94,15,28,.4);bottom:-12%;right:-8%;animation:dr2 36s ease-in-out infinite}
+.g3{width:420px;height:420px;background:rgba(200,169,106,.07);top:46%;left:42%;animation:dr3 34s ease-in-out infinite}
+@keyframes dr1{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,55px)}}
+@keyframes dr2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-45px)}}
+@keyframes dr3{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-60px)}}
+
+/* tipografia */
+.fr{font-family:'Fraunces',serif}
+h1,h2,.disp{font-family:'Fraunces',serif;font-weight:900;line-height:.98;letter-spacing:-.015em}
+h3{font-family:'Fraunces',serif;font-weight:700}
+.it{font-style:italic;color:var(--wine-b);font-weight:900}
+.it-c{font-style:italic;color:var(--champ);font-weight:700}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--wine-b)}
+.kick.c{color:var(--champ)}
+.lead{font-size:clamp(16px,1.8vw,20px);color:var(--text2);line-height:1.6}
+.lead b{color:var(--text);font-weight:600}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;padding:16px 30px;border-radius:9999px;border:none;cursor:pointer;transition:transform .16s,box-shadow .16s;position:relative;overflow:hidden}
+.btn-w{background:linear-gradient(120deg,var(--wine-b),var(--wine-d));color:#fff;box-shadow:0 14px 38px rgba(155,34,51,.4)}
+.btn-w:hover{transform:translateY(-2px);box-shadow:0 22px 54px rgba(192,57,74,.5)}
+.btn-w .sub{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;opacity:.9}
+.btn-bone{background:var(--bone);color:#1a0e11}
+.btn-bone:hover{transform:translateY(-2px)}
+.shine{position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:shine 4.5s ease-in-out infinite}
+@keyframes shine{0%,72%{left:-60%}88%,100%{left:130%}}
+
+/* topbar escassez */
+.topbar{background:linear-gradient(90deg,var(--wine-d),var(--wine),var(--wine-d));color:#fff;text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;position:relative;z-index:60}
+.topbar .cd{display:inline-flex;gap:4px;font-variant-numeric:tabular-nums}
+.topbar .cd b{background:rgba(0,0,0,.3);border-radius:5px;padding:2px 6px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-in{max-width:1180px;margin:0 auto;padding:12px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.logo{display:flex;flex-direction:column;align-items:flex-start;gap:0;line-height:1}
+.logo .l1{font-family:'Fraunces',serif;font-weight:900;font-size:26px;color:var(--bone);line-height:.82;letter-spacing:-.01em}
+.logo .l1 i{font-style:italic;color:var(--wine-b)}
+.logo .l2{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;letter-spacing:.24em;color:var(--text3);text-transform:uppercase;margin-top:7px;display:flex;align-items:center;gap:8px}
+.logo .l2::before{content:'';width:22px;height:2px;background:var(--wine-b)}
+.nav-cta{padding:10px 18px;font-size:14px}
+@media(max-width:620px){.logo .l2{display:none}}
+
+/* badge */
+.bdg{display:inline-flex;align-items:center;gap:9px;border-radius:9999px;padding:7px 15px 7px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+.bdg-live{background:rgba(192,57,74,.12);border:1px solid var(--border-w);color:#e07382}
+.bdg-live .d{width:8px;height:8px;border-radius:50%;background:var(--wine-b);box-shadow:0 0 0 0 rgba(192,57,74,.6);animation:lp 1.7s infinite}
+@keyframes lp{0%{box-shadow:0 0 0 0 rgba(192,57,74,.5)}70%{box-shadow:0 0 0 9px rgba(192,57,74,0)}100%{box-shadow:0 0 0 0 rgba(192,57,74,0)}}
+.bdg-champ{background:rgba(200,169,106,.1);border:1px solid var(--border-c);color:var(--champ)}
+
+/* ===== HERO ===== */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg video{width:100%;height:100%;object-fit:cover;opacity:.32}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,8,10,.7) 0%,rgba(18,10,12,.86) 55%,var(--bg) 100%),radial-gradient(80% 60% at 30% 30%,transparent,rgba(11,6,8,.7))}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:50px;align-items:center;padding:64px 0 70px}
+.hero h1{font-size:clamp(40px,6vw,82px);font-weight:900;margin:20px 0 22px;color:var(--bone)}
+.hero .eg{display:flex;gap:11px;flex-wrap:wrap}
+.hero-sub{max-width:560px;margin-bottom:30px}
+.hero-cta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hero-note{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);letter-spacing:.03em;line-height:1.5}
+.hero-meta{display:flex;gap:8px 24px;flex-wrap:wrap;margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text2)}
+.hero-meta .m{display:inline-flex;align-items:center;gap:8px}
+.hero-meta svg{width:16px;height:16px;stroke:var(--wine-b);fill:none}
+
+/* reveal card sketch->render (hero) */
+.reveal-card{position:relative}
+.reveal-frame{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--border-w);box-shadow:0 50px 130px rgba(94,15,28,.4),0 30px 70px rgba(0,0,0,.6);aspect-ratio:4/3;background:#16090c}
+.reveal-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reveal-frame .after{animation:reveal 6s cubic-bezier(.7,0,.3,1) infinite}
+@keyframes reveal{0%{clip-path:inset(0 100% 0 0)}40%{clip-path:inset(0 0 0 0)}60%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 100% 0 0)}}
+.reveal-line{position:absolute;top:0;bottom:0;width:2px;background:var(--bone);box-shadow:0 0 14px rgba(236,226,214,.7);z-index:3;animation:revline 6s cubic-bezier(.7,0,.3,1) infinite}
+@keyframes revline{0%{left:0%}40%{left:100%}60%{left:100%}100%{left:0%}}
+.reveal-tag{position:absolute;z-index:4;top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:6px 11px;border-radius:7px;backdrop-filter:blur(6px)}
+.reveal-tag.l{left:14px;background:rgba(11,6,8,.65);color:var(--bone-d)}
+.reveal-tag.r{right:14px;background:var(--wine);color:#fff}
+.reveal-cap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3)}
+.reveal-cap b{color:var(--champ)}
+.reveal-card .float{position:absolute;border-radius:11px;overflow:hidden;border:1px solid var(--border-w);box-shadow:0 20px 50px rgba(0,0,0,.6);width:128px;aspect-ratio:1;animation:fl 7s ease-in-out infinite}
+.reveal-card .float img{width:100%;height:100%;object-fit:cover}
+.reveal-card .f1{bottom:-26px;left:-30px;animation-delay:.4s}
+.reveal-card .f2{top:-26px;right:-26px;width:104px;animation-delay:1.6s}
+@keyframes fl{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+
+/* faixa logos/stats */
+.proof{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(11,6,8,.5)}
+.proof-in{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 48px;padding:24px 26px}
+.st{text-align:center}
+.st .n{font-family:'Fraunces',serif;font-weight:900;font-size:30px;color:var(--bone);line-height:1}
+.st .n em{font-style:normal;color:var(--wine-b)}
+.st .d{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text3);letter-spacing:.05em;margin-top:6px;text-transform:uppercase}
+
+/* seções */
+.sec{padding:84px 0;position:relative}
+.sec-sm{padding:58px 0}
+.sec-head{max-width:760px;margin-bottom:58px}
+.sec-head.center{margin:0 auto 58px;text-align:center}
+.split .sec-head,.split .txt .sec-head{margin-bottom:0}
+.sec-head .kick{display:inline-block;margin-bottom:16px}
+.sec-title{font-size:clamp(30px,4.6vw,58px);color:var(--bone)}
+.sec-desc{margin-top:18px}
+
+/* ===== REEL full-bleed vídeo ===== */
+.reel{position:relative;height:clamp(380px,56vw,640px);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 90% at 50% 50%,rgba(11,6,8,.45),rgba(11,6,8,.82))}
+.reel-c{position:relative;z-index:2;padding:30px}
+.reel-c h2{font-size:clamp(30px,5.5vw,68px);color:#fff;max-width:14ch;margin:0 auto;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.reel-c p{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--rose)}
+
+/* ===== GALERIA (parede de renders) ===== */
+.wall{position:relative;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.wrow{display:flex;gap:16px;width:max-content;animation:marq 60s linear infinite;margin-bottom:16px}
+.wrow.rev{animation-direction:reverse}
+.wrow.fast{animation-duration:44s}
+.wrow:hover{animation-play-state:paused}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.wt{position:relative;height:230px;border-radius:14px;overflow:hidden;border:1px solid var(--border);flex-shrink:0;box-shadow:0 24px 56px rgba(0,0,0,.5)}
+.wt img,.wt video{height:100%;width:auto;object-fit:cover;transition:transform .7s}
+.wt:hover img{transform:scale(1.06)}
+.wt::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(192,57,74,.18),inset 0 -60px 50px -30px rgba(11,6,8,.8)}
+.wt .wl{position:absolute;left:11px;bottom:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#fff;z-index:2}
+
+/* ===== BEFORE/AFTER slider ===== */
+.ba{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--border-w);box-shadow:0 44px 110px rgba(0,0,0,.6);aspect-ratio:16/10;cursor:ew-resize;user-select:none;touch-action:none;background:#16090c}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.ba .aw{position:absolute;inset:0;width:50%;overflow:hidden;border-right:2px solid var(--bone)}
+.ba .aw img{width:auto;max-width:none}
+.ba .lb{position:absolute;top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:5px 11px;border-radius:6px;z-index:3}
+.ba .lb.a{left:14px;background:rgba(11,6,8,.65);color:var(--bone-d)}.ba .lb.b{right:14px;background:var(--wine);color:#fff}
+.ba .hd{position:absolute;top:0;bottom:0;left:50%;width:46px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;z-index:4;pointer-events:none}
+.ba .hd .kn{width:46px;height:46px;border-radius:50%;background:var(--bone);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.5);color:var(--wine);font-size:18px;font-weight:700}
+
+/* mood window */
+.mood{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--border-w);box-shadow:0 44px 110px rgba(94,15,28,.32),0 30px 70px rgba(0,0,0,.6);aspect-ratio:16/11;background:#16090c}
+.mood img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease;transform:scale(1.04)}
+.mood img.on{opacity:1}
+.mood .scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--wine-b),transparent);box-shadow:0 0 16px 2px var(--wine-b);z-index:3;animation:scan 5s linear infinite}
+@keyframes scan{0%{top:-2%}100%{top:102%}}
+.mood .mt{position:absolute;top:15px;left:15px;z-index:4;display:flex;align-items:center;gap:8px;background:rgba(11,6,8,.6);border:1px solid var(--border);border-radius:9999px;padding:6px 13px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.mood .mt .d{width:6px;height:6px;border-radius:50%;background:var(--wine-b);box-shadow:0 0 9px var(--wine-b)}
+.mood .mn{position:absolute;bottom:16px;left:18px;z-index:4}
+.mood .mn .a{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--rose);text-transform:uppercase}
+.mood .mn .b{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(22px,3vw,32px);color:#fff}
+
+/* ===== split editorial ===== */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+.split.rev .txt{order:2}
+
+/* journey (2 dias) */
+.jrow{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.jcard{position:relative;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.jcard .jmedia{position:relative;aspect-ratio:16/9;overflow:hidden}
+.jcard .jmedia img,.jcard .jmedia video{width:100%;height:100%;object-fit:cover}
+.jcard .jmedia::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,6,8,.85),transparent 60%)}
+.jcard .jn{position:absolute;top:14px;left:16px;z-index:2;font-family:'Fraunces',serif;font-weight:900;font-size:60px;color:rgba(236,226,214,.16);line-height:1}
+.jcard .jbody{padding:24px 26px}
+.jcard .jt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine-b);margin-bottom:6px}
+.jcard h3{font-size:24px;color:var(--bone);margin-bottom:14px}
+.jcard ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.jcard li{display:flex;gap:11px;font-size:14.5px;color:var(--text2)}
+.jcard li svg{width:18px;height:18px;stroke:var(--wine-b);fill:none;flex-shrink:0;margin-top:2px}
+.crono{display:grid;grid-template-columns:repeat(5,1fr);margin-top:24px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.crono .cell{padding:26px 22px;border-right:1px solid var(--border)}
+.crono .cell:last-child{border-right:0}
+.crono .ck{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--wine-b);margin-bottom:11px}
+.crono .cv{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:var(--bone);line-height:1.1}
+.crono .cs{font-size:12.5px;color:var(--text3);margin-top:5px}
+@media(max-width:880px){.crono{grid-template-columns:1fr 1fr}.crono .cell{border-bottom:1px solid var(--border)}}
+@media(max-width:560px){.crono{grid-template-columns:1fr}}
+
+/* ===== STACKING CARDS (o que vai aprender) ===== */
+.learn{position:relative}
+.scard{position:sticky;top:calc(94px + var(--i,0)*15px);border-radius:24px;overflow:hidden;border:1px solid var(--border-w);background:var(--bg2);box-shadow:0 34px 90px rgba(0,0,0,.6),0 0 0 1px rgba(11,6,8,.4);margin-bottom:34px}
+.scard-in{display:grid;grid-template-columns:1.06fr 1fr;min-height:clamp(420px,56vh,560px)}
+.scard.rev .scard-media{order:2}
+.scard-media{position:relative;overflow:hidden;background:#16090c}
+.scard-media img,.scard-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
+.scard:hover .scard-media img{transform:scale(1.05)}
+.scard-media::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 100px rgba(11,6,8,.55);background:linear-gradient(90deg,transparent 60%,rgba(26,14,17,.5))}
+.scard.rev .scard-media::after{background:linear-gradient(270deg,transparent 60%,rgba(26,14,17,.5))}
+.scard-body{padding:48px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.scard .sn{font-family:'Fraunces',serif;font-weight:900;font-size:60px;line-height:1;color:transparent;-webkit-text-stroke:1.4px rgba(192,57,74,.5);margin-bottom:6px}
+.scard .stag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--wine-b);margin-bottom:16px}
+.scard h3{font-size:clamp(26px,2.7vw,38px);color:var(--bone);margin-bottom:14px;line-height:1.04}
+.scard h3 .it,.scard h3 .it-c{font-size:inherit}
+.scard p{font-size:15.5px;color:var(--text2);max-width:44ch}
+.scard .splay{position:absolute;top:18px;left:18px;z-index:3;display:flex;align-items:center;gap:8px;background:rgba(11,6,8,.55);border:1px solid var(--border);border-radius:9999px;padding:6px 13px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;backdrop-filter:blur(6px)}
+.scard .splay .d{width:6px;height:6px;border-radius:50%;background:var(--wine-b);box-shadow:0 0 9px var(--wine-b)}
+@media(max-width:920px){
+  .scard{position:relative;top:auto;margin-bottom:18px}
+  .scard-in{grid-template-columns:1fr}
+  .scard.rev .scard-media{order:0}
+  .scard-media{min-height:230px}
+  .scard-body{padding:32px 28px}
+}
+
+/* prêmios */
+.prizes{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:18px}
+.prize{position:relative;border-radius:var(--r);padding:32px 28px;border:1px solid var(--border);background:var(--bg2);overflow:hidden}
+.prize.gold{border-color:var(--border-c);background:linear-gradient(165deg,rgba(200,169,106,.12),rgba(94,15,28,.1))}
+.prize .pl{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;color:var(--wine-b)}
+.prize.gold .pl{color:var(--champ)}
+.prize .pic{font-size:40px;margin-bottom:14px;line-height:1}
+.prize h3{font-size:24px;color:var(--bone);line-height:1.04;margin-bottom:9px}
+.prize.gold h3{font-size:28px}
+.prize p{font-size:14.5px;color:var(--text2)}
+.prize .pp{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text3)}
+.prize.gold::after{content:'1º';position:absolute;top:-22px;right:-4px;font-family:'Fraunces',serif;font-weight:900;font-size:130px;color:rgba(200,169,106,.1);line-height:1}
+
+/* PÓDIO 1º lugar — MacBook 3D */
+.podium{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center;border:1px solid var(--border-c);border-radius:26px;background:linear-gradient(150deg,rgba(200,169,106,.1),rgba(94,15,28,.12));padding:42px 46px;position:relative;overflow:hidden;margin-bottom:18px}
+.podium::after{content:'1º';position:absolute;top:-34px;left:-6px;font-family:'Fraunces',serif;font-weight:900;font-size:200px;color:rgba(200,169,106,.07);line-height:1;pointer-events:none}
+.podium .pbody{position:relative;z-index:2}
+.podium .plabel{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--champ);margin-bottom:16px}
+.podium h3{font-size:clamp(30px,3.4vw,46px);color:var(--bone);line-height:1.02;margin-bottom:14px}
+.podium h3 .it-c{font-size:inherit}
+.podium p{font-size:16px;color:var(--text2);max-width:40ch}
+.podium .pchips{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.podium .pchip{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--champ);background:rgba(200,169,106,.1);border:1px solid var(--border-c);padding:6px 12px;border-radius:8px}
+.mbstage{perspective:1000px;display:flex;align-items:center;justify-content:center;min-height:340px;position:relative;z-index:2}
+.macbook{position:relative;width:440px;max-width:92%;transform-style:preserve-3d;transform:rotateX(var(--rx,10deg)) rotateY(var(--ry,-40deg));will-change:transform;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
+.mb-screen{position:relative;width:100%;aspect-ratio:16/10;background:#0a0608;border:9px solid #170a0d;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(200,169,106,.2);overflow:hidden}
+.mb-screen video,.mb-screen img{width:100%;height:100%;object-fit:cover}
+.mb-screen .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:58px;height:7px;background:#170a0d;border-radius:0 0 6px 6px;z-index:3}
+.mb-screen .glare{position:absolute;inset:0;background:linear-gradient(118deg,rgba(255,255,255,.1),transparent 38%);pointer-events:none;z-index:2}
+.mb-base{width:116%;margin-left:-8%;height:15px;background:linear-gradient(180deg,#3a2024,#170a0d);border-radius:2px 2px 11px 11px;box-shadow:0 22px 34px rgba(0,0,0,.55)}
+.mb-base::after{content:'';display:block;width:64px;height:4px;margin:0 auto;background:#0a0608;border-radius:0 0 7px 7px}
+
+/* prêmios 2º/3º com vídeo RenderLAB */
+.prize2-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.prize2{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.prize2 .p2media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#16090c}
+.prize2 .p2media video{width:100%;height:100%;object-fit:cover}
+.prize2 .p2media::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,6,8,.8),transparent 55%)}
+.prize2 .p2rl{position:absolute;top:14px;left:16px;z-index:2;height:16px;opacity:.95}
+.prize2 .p2pos{position:absolute;top:12px;right:16px;z-index:2;font-family:'Fraunces',serif;font-weight:900;font-size:30px;color:var(--bone)}
+.prize2 .p2body{padding:24px 26px}
+.prize2 .p2l{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine-b);margin-bottom:7px}
+.prize2 h3{font-size:23px;color:var(--bone);margin-bottom:7px}
+.prize2 p{font-size:14.5px;color:var(--text2)}
+@media(max-width:920px){.podium{grid-template-columns:1fr;text-align:center}.podium .pbody{order:2}.podium p,.podium .plabel{margin-left:auto;margin-right:auto}.podium .pchips{justify-content:center}.prize2-row{grid-template-columns:1fr}}
+
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{border:1px solid var(--border);border-radius:var(--rs);background:var(--bg2);padding:28px 26px;transition:border-color .25s,transform .25s}
+.card:hover{border-color:var(--border-w);transform:translateY(-4px)}
+.card .ci{width:46px;height:46px;border-radius:12px;background:rgba(192,57,74,.12);border:1px solid var(--border-w);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.card .ci svg{width:22px;height:22px;stroke:var(--wine-b);fill:none}
+.card-img{position:relative;aspect-ratio:16/10;border-radius:11px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.card:hover .card-img img{transform:scale(1.06)}
+.card-img .cl{position:absolute;left:11px;bottom:9px;width:34px;height:34px;border-radius:9px;background:rgba(11,6,8,.6);border:1px solid var(--border-w);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.card-img .cl svg{width:18px;height:18px;stroke:var(--bone);fill:none}
+.card h3{font-size:21px;color:var(--bone);margin-bottom:9px}
+.card p{font-size:14.5px;color:var(--text2)}
+
+/* bônus */
+.bonus{display:flex;gap:18px;align-items:flex-start;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg2);padding:22px 24px;transition:border-color .2s}
+.bonus:hover{border-color:var(--border-w)}
+.bonus .bi{width:46px;height:46px;border-radius:12px;background:linear-gradient(120deg,var(--wine-b),var(--wine-d));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px rgba(155,34,51,.35)}
+.bonus .bi svg{width:22px;height:22px;stroke:#fff;fill:none}
+.bonus h3{font-family:'Space Grotesk';font-weight:600;font-size:17px;color:var(--bone);margin-bottom:4px}
+.bonus p{font-size:14px;color:var(--text2)}
+
+/* host */
+.host{display:grid;grid-template-columns:320px 1fr;gap:44px;align-items:center;position:relative;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.host-photo{position:relative;aspect-ratio:1/1;overflow:hidden}
+.host-photo img{width:100%;height:100%;object-fit:cover}
+.host-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--bg2))}
+.host-body{padding:38px 44px 38px 0}
+.host .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine-b);margin-bottom:9px}
+.host h3{font-size:34px;color:var(--bone);margin-bottom:4px}
+.host .role{font-style:italic;font-family:'Fraunces',serif;font-size:16px;color:var(--rose);margin-bottom:15px}
+.host p{font-size:14.5px;color:var(--text2);margin-bottom:12px}
+.host p b{color:var(--bone)}
+.host-stats{display:flex;gap:30px;margin-top:18px;flex-wrap:wrap}
+.host-stats .n{font-family:'Fraunces',serif;font-weight:900;font-size:24px;color:var(--wine-b)}
+.host-stats .d{font-size:11.5px;color:var(--text3);font-family:'JetBrains Mono'}
+.clients{margin-top:48px;text-align:center}
+.clients .clab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:26px}
+.clients-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:24px 46px}
+.client{display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.82;transition:opacity .25s,transform .25s}
+.client:hover{opacity:1;transform:translateY(-2px)}
+.client .cn{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:var(--bone);white-space:nowrap}
+.client .ch{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--wine-b);letter-spacing:.03em}
+
+/* oferta */
+.offer{max-width:780px;margin:0 auto;background:linear-gradient(180deg,rgba(192,57,74,.08),rgba(236,226,214,.02));border:1px solid var(--border-w);border-radius:26px;padding:8px;box-shadow:0 60px 130px rgba(94,15,28,.3)}
+.offer-in{background:#100a0c;border-radius:20px;padding:42px 40px;text-align:center}
+.offer h3{font-size:clamp(26px,3.4vw,40px);color:var(--bone);margin-bottom:6px}
+.stack{text-align:left;max-width:540px;margin:26px auto 0;display:flex;flex-direction:column;gap:12px}
+.stack .si{display:flex;justify-content:space-between;gap:14px;align-items:baseline;font-size:15px}
+.stack .si .sd{display:flex;gap:10px;align-items:baseline}
+.stack .si svg{width:17px;height:17px;stroke:var(--wine-b);fill:none;flex-shrink:0;transform:translateY(2px)}
+.stack .si .sv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3);white-space:nowrap}
+.stack .si .sv s{opacity:.65}
+.stack-tot{display:flex;justify-content:space-between;border-top:1px dashed var(--border);margin-top:16px;padding-top:16px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text2)}
+.stack-tot b{color:var(--bone)}
+.pbox{margin-top:28px}
+.pbox .from{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text3)}
+.pbox .from s{color:#e07382}
+.pbox .big{font-family:'Fraunces',serif;font-weight:900;font-size:74px;color:var(--bone);line-height:.92;margin:4px 0}
+.pbox .big small{font-size:26px;color:var(--text3)}
+.pbox .big .c{color:var(--wine-b)}
+.avista{font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.05em;color:var(--text3);margin-top:8px}
+.avista::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--champ);margin-right:7px;vertical-align:middle}
+.offer .btn-w{margin-top:24px;font-size:18px;padding:18px 42px;width:100%;max-width:440px}
+.offer .gt{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3)}
+
+/* lotes (sem preço) */
+.lotes{max-width:680px;margin:32px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.lote{border:1px solid var(--border);border-radius:var(--rs);padding:18px 14px;text-align:center;position:relative;background:var(--bg2);opacity:.5}
+.lote.on{opacity:1;border-color:var(--wine-b);background:rgba(192,57,74,.08);box-shadow:0 16px 40px rgba(155,34,51,.2)}
+.lote .ln{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.lote.on .ln{color:var(--wine-b)}
+.lote .lst{font-family:'Fraunces',serif;font-weight:900;font-size:17px;color:var(--bone);margin:7px 0 3px}
+.lote .ls{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.lote .now{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,var(--wine-b),var(--wine-d));color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:9999px;text-transform:uppercase;white-space:nowrap}
+.scar{max-width:680px;margin:22px auto 0}
+.scar .bar{height:12px;border-radius:9999px;background:rgba(236,226,214,.07);overflow:hidden;border:1px solid var(--border)}
+.scar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--wine-d),var(--wine-b));border-radius:9999px;transition:width 1.5s ease;box-shadow:0 0 16px rgba(192,57,74,.5)}
+.scar .sl{display:flex;justify-content:space-between;margin-top:9px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2)}
+.scar .sl b{color:var(--wine-b)}
+
+/* garantia */
+.guar{display:flex;gap:26px;align-items:center;max-width:800px;margin:0 auto;border:1px solid var(--border-w);border-radius:var(--r);background:var(--bg2);padding:32px 36px}
+.guar .gi{width:78px;height:78px;flex-shrink:0;border-radius:50%;background:rgba(192,57,74,.1);border:1px solid var(--border-w);display:flex;align-items:center;justify-content:center}
+.guar .gi svg{width:38px;height:38px;stroke:var(--wine-b);fill:none}
+.guar h3{font-size:24px;color:var(--bone);margin-bottom:8px}
+.guar p{font-size:15px;color:var(--text2)}
+.support{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;max-width:800px;margin:0 auto;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2);padding:24px 32px;text-align:center}
+.support .st{font-size:15.5px;color:var(--text2)}.support .st b{color:var(--bone)}
+.support .btn-ghost{padding:13px 24px;font-size:15px}
+
+/* faq */
+.faq{max-width:780px;margin:0 auto}
+.fi{border-bottom:1px solid var(--border)}
+.fq{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:21px 4px;cursor:pointer;font-size:17px;font-weight:600;color:var(--bone)}
+.fq .ar{color:var(--wine-b);transition:transform .25s;flex-shrink:0}
+.fi.open .fq .ar{transform:rotate(180deg)}
+.fa{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--text2);font-size:15px}
+.fi.open .fa{max-height:340px}
+.fa p{padding:0 4px 22px}
+
+/* final */
+.final{position:relative;overflow:hidden;text-align:center;border-top:1px solid var(--border)}
+.final video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.26}
+.final::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 90% at 50% 40%,rgba(18,10,12,.6),var(--bg) 90%)}
+.final-in{position:relative;z-index:2;padding:100px 0}
+.final h2{font-size:clamp(32px,5.2vw,64px);color:var(--bone);max-width:16ch;margin:0 auto 18px}
+.final p{font-size:18px;color:var(--text2);max-width:560px;margin:0 auto 30px}
+
+footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.03em}
+footer a{color:var(--wine-b)}
+
+/* reveal scroll */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+/* === SCROLL FX premium === */
+.fx-title{clip-path:inset(0 0 108% 0);transform:translateY(12px);transition:clip-path 1.05s cubic-bezier(.62,0,.15,1),transform 1.05s cubic-bezier(.62,0,.15,1)}
+.fx-title.in{clip-path:inset(-18% 0 -18% 0);transform:none}
+.fx-clip{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s cubic-bezier(.62,0,.15,1)}
+.fx-clip.in{clip-path:inset(0 0 0 0)}
+.fx-clip>img,.fx-clip>video{transform:scale(1.16);transition:transform 1.7s cubic-bezier(.62,0,.15,1)}
+.fx-clip.in>img,.fx-clip.in>video{transform:scale(1)}
+@media(prefers-reduced-motion:reduce){.fx-title,.fx-clip,.fx-clip>img,.fx-clip>video,.rv{clip-path:none!important;transform:none!important;opacity:1!important}}
+
+@media(max-width:920px){
+  .hero-in,.split,.jrow,.grid2{grid-template-columns:1fr;gap:34px}
+  .split.rev .txt{order:0}
+  .prizes,.grid3{grid-template-columns:1fr}
+  .lotes{grid-template-columns:1fr}
+  .host{grid-template-columns:1fr}.host-photo{aspect-ratio:16/10}.host-photo::after{background:linear-gradient(0deg,var(--bg2),transparent 60%)}.host-body{padding:0 30px 34px}
+  .guar{flex-direction:column;text-align:center}
+  .reveal-card{max-width:480px;margin:0 auto}
+}
+@media(max-width:560px){
+  .ctn,.ctn-wide{padding:0 18px}.sec{padding:54px 0}.sec-head,.sec-head.center{margin-bottom:40px}
+  .hero-in{padding:40px 0 50px}
+  .pbox .big{font-size:58px}
+  .reveal-card .float{display:none}
+  .topbar{font-size:10.5px;gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="progress" aria-hidden="true"><span id="prog"></span></div>
+<div class="lb" id="lb" aria-hidden="true"><span class="lb-x">&times;</span><img id="lbImg" src="" alt=""></div>
+<div class="bg-fx" aria-hidden="true"><div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>&#9733; LOTE 1 ABERTO &middot; condi&ccedil;&atilde;o de estreia</span>
+  <span class="cd" id="topCd"><b>00</b>:<b>00</b>:<b>00</b></span>
+  <span>at&eacute; o lote virar</span>
+</div>
+
+<!-- NAV -->
+<nav><div class="nav-in">
+  <a class="logo" href="#">
+    <span class="l1">Desaf<i>i</i>o</span>
+    <span class="l2">Render com IA &middot; do zero</span>
+  </a>
+  <button class="btn btn-w nav-cta" onclick="buy()"><span class="shine"></span>Garantir vaga</button>
+</div></nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><video id="heroVid" src="assets/video/v-hero.mp4" autoplay muted loop playsinline></video></div>
+  <div class="ctn hero-in">
+    <div class="rv">
+      <div class="eg">
+        <span class="bdg bdg-live"><span class="d"></span> ao vivo &middot; 1 e 2 de agosto</span>
+        <span class="bdg bdg-champ">&#127942; 1&ordm; lugar leva um MacBook</span>
+      </div>
+      <h1>Do <span class="it">zero</span> ao seu primeiro render <span class="it-c">profissional</span> &mdash; em um fim de semana.</h1>
+      <p class="hero-sub lead">Sem programa de 3D, sem V-Ray, sem PC gamer. Voc&ecirc; parte de uma <b>foto ou um print simples</b> e, com IA, cria renders de n&iacute;vel profissional &mdash; tirando anos de atraso em dois dias e competindo ao vivo por pr&ecirc;mios.</p>
+      <div class="hero-cta-row">
+        <button class="btn btn-w" style="font-size:18px;padding:18px 38px" onclick="buy()"><span class="shine"></span>Entrar no desafio <span class="sub">R$9,90</span></button>
+        <span class="hero-note">acesso imediato<br>7 dias de garantia</span>
+      </div>
+      <div class="hero-meta">
+        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 1 e 2 de agosto &middot; online e ao vivo</span>
+        <span class="m"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> pra quem come&ccedil;a do zero</span>
+      </div>
+    </div>
+    <!-- reveal sketch->render -->
+    <div class="reveal-card rv">
+      <div class="reveal-frame">
+        <img src="assets/img/renders/ba-fachada-antes.jpg" alt="foto">
+        <img class="after" src="assets/img/renders/ba-fachada-depois.jpg" alt="render">
+        <div class="reveal-line"></div>
+        <span class="reveal-tag l">Foto / print</span>
+        <span class="reveal-tag r">Render com IA</span>
+      </div>
+      <div class="float f1"><img src="assets/img/renders/g02.jpg" alt=""></div>
+      <div class="float f2"><img src="assets/img/renders/mood-noturna.jpg" alt=""></div>
+      <div class="reveal-cap">do <b>zero</b> ao render &mdash; em ~30 segundos</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<div class="proof"><div class="proof-in">
+  <div class="st"><div class="n">10.000<em>+</em></div><div class="d">alunos formados</div></div>
+  <div class="st"><div class="n">100<em>M+</em></div><div class="d">views org&acirc;nicas</div></div>
+  <div class="st"><div class="n">20<em>+</em></div><div class="d">pa&iacute;ses</div></div>
+  <div class="st"><div class="n">2</div><div class="d">dias pra sair do zero</div></div>
+</div></div>
+
+<!-- REEL full-bleed -->
+<section class="reel">
+  <video id="reelVid" src="assets/video/v-reel1.mp4" muted loop playsinline data-para="0.16"></video>
+  <div class="reel-c rv">
+    <span class="kick" style="color:var(--rose)">Olha o n&iacute;vel</span>
+    <h2 class="disp">Tudo isso &eacute; <span class="it">IA</span>. Voc&ecirc; vai criar igual.</h2>
+    <p>nenhum render aqui usou 3ds Max, V-Ray ou PC gamer</p>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section class="sec-sm">
+  <div class="ctn"><div class="sec-head center rv">
+    <span class="kick">O que sai disso</span>
+    <div class="sec-title disp">N&atilde;o &eacute; teoria. <span class="it">Isso</span> vai sair do seu computador.</div>
+  </div></div>
+  <div class="wall rv" style="margin-top:36px">
+    <div class="wrow" id="wA"></div>
+    <div class="wrow rev" id="wB"></div>
+    <div class="wrow fast" id="wC"></div>
+  </div>
+  <p class="gallery-hint rv"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg> <b>clique em qualquer render</b> pra ampliar e ver em alta resolu&ccedil;&atilde;o</p>
+</section>
+
+<!-- ANTES/DEPOIS + MOOD (editorial split) -->
+<section class="sec">
+  <div class="ctn split">
+    <div class="txt rv">
+      <span class="kick">Do print ao render</span>
+      <div class="sec-title disp" style="font-size:clamp(28px,4vw,48px)">Manda um print. <span class="it">A IA</span> devolve um render.</div>
+      <p class="sec-desc lead">Voc&ecirc; n&atilde;o precisa modelar nada. Tira uma foto, manda um print do seu projeto ou um rascunho simples &mdash; e a IA entrega o render fotorrealista. <b>Arrasta a barra</b> e v&ecirc;:</p>
+    </div>
+    <div class="ba rv" id="ba1">
+      <img src="assets/img/renders/ba-int-depois.jpg" alt="render">
+      <div class="aw" id="ba1aw"><img src="assets/img/renders/ba-int-antes.jpg" alt="print"></div>
+      <span class="lb a">Seu print</span><span class="lb b">Render com IA</span>
+      <div class="hd" id="ba1hd"><div class="kn">&#8596;</div></div>
+    </div>
+  </div>
+  <div class="ctn split rev" style="margin-top:80px">
+    <div class="txt rv">
+      <span class="kick c">Uma cena, mil climas</span>
+      <div class="sec-title disp" style="font-size:clamp(28px,4vw,48px)">Troca a <span class="it-c">atmosfera</span> com um clique.</div>
+      <p class="sec-desc lead">Golden hour, noite, chuva, neve, outono, primavera &mdash; a mesma cena em qualquer clima, na hora. &Eacute; esse n&iacute;vel de controle que voc&ecirc; sai dominando no desafio.</p>
+    </div>
+    <div class="mood rv" id="mood">
+      <img class="on" src="assets/img/renders/mood-golden.jpg" alt="">
+      <img src="assets/img/renders/mood-noturna.jpg" alt="">
+      <img src="assets/img/renders/mood-chuva.jpg" alt="">
+      <img src="assets/img/renders/mood-neve.jpg" alt="">
+      <img src="assets/img/renders/mood-outono.jpg" alt="">
+      <img src="assets/img/renders/mood-primavera.jpg" alt="">
+      <div class="scan"></div>
+      <div class="mt"><span class="d"></span> render com IA</div>
+      <div class="mn"><div class="a">atmosfera</div><div class="b" id="moodN">Golden hour</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRÊMIOS -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick c">N&atilde;o &eacute; s&oacute; aprender &mdash; &eacute; competir</span>
+      <div class="sec-title disp">Os melhores renders <span class="it-c">levam pr&ecirc;mio.</span></div>
+      <p class="sec-desc lead" style="margin-left:auto;margin-right:auto">Voc&ecirc; cria, sobe pro ranking e concorre de verdade. Quem renderizar melhor, ganha:</p>
+    </div>
+    <!-- 1º lugar: MacBook 3D -->
+    <div class="podium rv">
+      <div class="pbody">
+        <div class="plabel">&#127942; 1&ordm; lugar</div>
+        <h3>Um MacBook <span class="it-c">novo</span> pra voc&ecirc; criar render com IA.</h3>
+        <p>O melhor render do desafio leva um MacBook novo &mdash; e <b style="color:var(--bone)">1 ano de RenderLAB gr&aacute;tis</b> pra transformar isso em profiss&atilde;o.</p>
+        <div class="pchips"><span class="pchip">MacBook</span><span class="pchip">+ 1 ano de RenderLAB</span></div>
+      </div>
+      <div class="mbstage">
+        <div class="macbook">
+          <div class="mb-screen"><span class="notch"></span><span class="glare"></span><video src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
+          <div class="mb-base"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 2º e 3º -->
+    <div class="prize2-row rv">
+      <div class="prize2">
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">2&ordm;</span><video src="assets/video/renderlab-vert.mp4" muted loop playsinline></video></div>
+        <div class="p2body"><div class="p2l">2&ordm; lugar</div><h3>1 ano de RenderLAB gr&aacute;tis</h3><p>O segundo melhor render leva um ano inteiro de RenderLAB pra continuar criando sem parar.</p></div>
+      </div>
+      <div class="prize2">
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">3&ordm;</span><video src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
+        <div class="p2body"><div class="p2l">3&ordm; lugar</div><h3>1 m&ecirc;s de RenderLAB gr&aacute;tis</h3><p>O terceiro lugar ganha um m&ecirc;s completo de RenderLAB pra emendar direto depois do desafio.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY 2 dias -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick">Como funciona</span>
+      <div class="sec-title disp">Dois dias. Do <span class="it">zero</span> ao avan&ccedil;ado.</div>
+      <p class="sec-desc lead" style="margin-left:auto;margin-right:auto">Ao vivo, com o Luiz puxando sua m&atilde;o. Voc&ecirc; n&atilde;o assiste &mdash; voc&ecirc; cria junto.</p>
+    </div>
+    <div class="jrow rv">
+      <div class="jcard">
+        <div class="jmedia"><span class="jn">01</span><video src="assets/video/v-reel4.mp4" muted loop playsinline></video></div>
+        <div class="jbody">
+          <div class="jt">S&aacute;bado &middot; 1 de agosto</div>
+          <h3>Seu primeiro render</h3>
+          <ul>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Transforma uma foto ou print num render fotorrealista</li>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Controla luz, materiais e clima com um clique</li>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Entende o fluxo que profissional nenhum te conta de gra&ccedil;a</li>
+          </ul>
+        </div>
+      </div>
+      <div class="jcard">
+        <div class="jmedia"><span class="jn">02</span><video src="assets/video/v-reel2.mp4" muted loop playsinline></video></div>
+        <div class="jbody">
+          <div class="jt">Domingo &middot; 2 de agosto</div>
+          <h3>N&iacute;vel profissional</h3>
+          <ul>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Cria varia&ccedil;&otilde;es, &acirc;ngulos novos e at&eacute; v&iacute;deo do projeto</li>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Finaliza o render que vai pro ranking do desafio</li>
+            <li><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Sai sabendo repetir isso sozinho, em qualquer projeto</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="crono rv">
+      <div class="cell"><div class="ck">Datas</div><div class="cv">1 e 2 de agosto</div><div class="cs">s&aacute;bado e domingo</div></div>
+      <div class="cell"><div class="ck">Hor&aacute;rio</div><div class="cv">9h30 &agrave;s 17h30</div><div class="cs">almo&ccedil;o 12h&ndash;13h30</div></div>
+      <div class="cell"><div class="ck">Formato</div><div class="cv">100% online</div><div class="cs">ao vivo, com perguntas</div></div>
+      <div class="cell"><div class="ck">Dura&ccedil;&atilde;o</div><div class="cv">16 horas</div><div class="cs">manh&atilde; e tarde, 2 dias</div></div>
+      <div class="cell"><div class="ck">Certificado</div><div class="cv">Oficial</div><div class="cs">horas complementares</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE VOCÊ VAI APRENDER (stacking cards) -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick">A grade do desafio</span>
+      <div class="sec-title disp">10 coisas que voc&ecirc; sai <span class="it">sabendo fazer</span> &mdash; do zero.</div>
+      <p class="sec-desc lead" style="margin-left:auto;margin-right:auto">Do print ao render de cinema. Cada peça do fluxo que profissional usa, ao vivo, passo a passo &mdash; pra voc&ecirc; sair fazendo r&aacute;pido, mesmo come&ccedil;ando hoje.</p>
+    </div>
+  </div>
+  <div class="ctn learn rv">
+    <div class="scard" style="--i:0">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/w-print.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> render com IA</div></div>
+        <div class="scard-body"><div class="sn">01</div><div class="stag">A base de tudo</div><h3>Transforme um print em <span class="it">render</span></h3><p>Manda uma foto, um print do seu projeto ou um rascunho simples e a IA devolve um render fotorrealista em segundos. &Eacute; por aqui que voc&ecirc; come&ccedil;a &mdash; mesmo sem nunca ter tocado em IA.</p></div>
+      </div>
+    </div>
+    <div class="scard rev" style="--i:1">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/w-cenas.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> gerado com IA</div></div>
+        <div class="scard-body"><div class="sn">02</div><div class="stag">Composi&ccedil;&atilde;o</div><h3>Monte cenas que parecem <span class="it">foto</span></h3><p>Componha ambientes do zero &mdash; m&oacute;veis, materiais, pessoas e contexto &mdash; e construa cenas completas que enganam o olho. Sem modelar nada em 3D.</p></div>
+      </div>
+    </div>
+    <div class="scard" style="--i:2">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/w-mood.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> mesma cena, outro clima</div></div>
+        <div class="scard-body"><div class="sn">03</div><div class="stag">Atmosfera</div><h3>Troque o <span class="it-c">clima</span> com um clique</h3><p>Golden hour, noite, chuva, neve, primavera &mdash; a mesma cena em qualquer atmosfera, na hora. &Eacute; o controle que faz o cliente dizer "&eacute; exatamente isso".</p></div>
+      </div>
+    </div>
+    <div class="scard rev" style="--i:3">
+      <div class="scard-in">
+        <div class="scard-media"><img src="assets/img/renders/g06.jpg" alt=""></div>
+        <div class="scard-body"><div class="sn">04</div><div class="stag">Detalhe</div><h3>Vidro, espelho e <span class="it">materiais reais</span></h3><p>Reflexos cr&iacute;veis em vidro e espelho, texturas e materiais que parecem de verdade. O detalhe que separa um render "ok" de um render que vende.</p></div>
+      </div>
+    </div>
+    <div class="scard" style="--i:4">
+      <div class="scard-in">
+        <div class="scard-media"><img src="assets/img/renders/g13.jpg" alt=""></div>
+        <div class="scard-body"><div class="sn">05</div><div class="stag">&Acirc;ngulos</div><h3>Gere <span class="it">&acirc;ngulos novos</span> da mesma cena</h3><p>De uma imagem s&oacute;, a IA cria vistas e &acirc;ngulos diferentes do mesmo projeto &mdash; sem refazer nada. Mais op&ccedil;&otilde;es pra apresentar, em minutos.</p></div>
+      </div>
+    </div>
+    <div class="scard rev" style="--i:5">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/v-final.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> timelapse com IA</div></div>
+        <div class="scard-body"><div class="sn">06</div><div class="stag">Tempo</div><h3>Timelapse de obra em <span class="it">segundos</span></h3><p>Mostre a obra evoluindo, do terreno ao projeto pronto, num timelapse que impressiona &mdash; gerado pela IA, sem filmar nada.</p></div>
+      </div>
+    </div>
+    <div class="scard" style="--i:6">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/w-loteamento.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> vista a&eacute;rea com IA</div></div>
+        <div class="scard-body"><div class="sn">07</div><div class="stag">Vista a&eacute;rea</div><h3>Mostre o <span class="it">empreendimento</span> inteiro</h3><p>Crie vistas a&eacute;reas e criativos de loteamento que mostram o projeto todo de tirar o f&ocirc;lego &mdash; o tipo de imagem que impressiona na hora.</p></div>
+      </div>
+    </div>
+    <div class="scard rev" style="--i:7">
+      <div class="scard-in">
+        <div class="scard-media"><video src="assets/video/w-narrativa.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> v&iacute;deo gerado com IA</div></div>
+        <div class="scard-body"><div class="sn">08</div><div class="stag">Movimento</div><h3>V&iacute;deo de <span class="it">cinema</span>, sem editor</h3><p>Transforme o render num v&iacute;deo cinematogr&aacute;fico com movimento de c&acirc;mera e narrativa, pronto pra apresentar &mdash; sem abrir nenhum editor de v&iacute;deo.</p></div>
+      </div>
+    </div>
+    <div class="scard" style="--i:8">
+      <div class="scard-in">
+        <div class="scard-media"><img src="assets/img/renders/g07.jpg" alt=""></div>
+        <div class="scard-body"><div class="sn">09</div><div class="stag">Acabamento</div><h3>O detalhe que separa <span class="it">amador de pro</span></h3><p>Upscale pra 4K, ajuste de cor, luz e p&oacute;s-produ&ccedil;&atilde;o. &Eacute; o &uacute;ltimo passo que faz o seu render parecer feito por est&uacute;dio &mdash; e n&atilde;o por iniciante.</p></div>
+      </div>
+    </div>
+    <div class="scard rev" style="--i:9">
+      <div class="scard-in">
+        <div class="scard-media"><img src="assets/img/renders/g25.jpg" alt=""></div>
+        <div class="scard-body"><div class="sn">10</div><div class="stag">Velocidade</div><h3>Coloque a <span class="it-c">IA</span> pra trabalhar por voc&ecirc;</h3><p>Use agentes de IA que aceleram render, narrativa e cenas complexas. Voc&ecirc; entrega em minutos o que levava dias &mdash; e larga na frente de quem ainda faz tudo na m&atilde;o.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRA QUEM -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick">Pra quem &eacute;</span>
+      <div class="sec-title disp">Pra quem est&aacute; <span class="it">atrasado</span> em IA e quer virar o jogo r&aacute;pido.</div>
+    </div>
+    <div class="grid3 rv">
+      <div class="card"><div class="card-img"><img src="assets/img/renders/g22.jpg" alt="" loading="lazy"><span class="cl"><svg stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span></div><h3 class="fr">Come&ccedil;ando do zero</h3><p>Nunca renderizou nada e acha que IA &eacute; complicado. O desafio foi desenhado exatamente pra voc&ecirc; come&ccedil;ar.</p></div>
+      <div class="card"><div class="card-img"><img src="assets/img/renders/g05.jpg" alt="" loading="lazy"><span class="cl"><svg stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></span></div><h3 class="fr">Arquiteto ou designer</h3><p>Voc&ecirc; entrega projeto e sabe que render bom fecha cliente &mdash; mas n&atilde;o quer terceirizar nem aprender V-Ray.</p></div>
+      <div class="card"><div class="card-img"><img src="assets/img/renders/g25.jpg" alt="" loading="lazy"><span class="cl"><svg stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span></div><h3 class="fr">Quer sair na frente</h3><p>O mercado t&aacute; correndo com IA e voc&ecirc; n&atilde;o quer ficar pra tr&aacute;s. Aqui voc&ecirc; tira o atraso num fim de semana.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BÔNUS -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick c">Vai junto</span>
+      <div class="sec-title disp">Al&eacute;m do desafio, voc&ecirc; leva <span class="it-c">tudo isso.</span></div>
+    </div>
+    <div class="grid2 rv">
+      <div class="bonus"><div class="bi"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4M10 8l4 2.5L10 13z"/></svg></div><div><h3>Renderflix &mdash; aulas de aquecimento</h3><p>Acervo de aulas pra voc&ecirc; chegar aquecido e nivelado com todo mundo <b>antes</b> do desafio come&ccedil;ar. Ningu&eacute;m fica pra tr&aacute;s no dia.</p></div></div>
+      <div class="bonus"><div class="bi"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></div><div><h3>Agentes de IA exclusivos</h3><p>Assistentes configurados pelo studio pra voc&ecirc; aplicar os m&eacute;todos sem ter que montar nada do zero.</p></div></div>
+      <div class="bonus"><div class="bi"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><path d="M8 21h8M12 17v4M3 4h18v9a3 3 0 01-3 3H6a3 3 0 01-3-3zM3 8h18"/></svg></div><div><h3>Concurso com MacBook + pr&ecirc;mios</h3><p>Sua participa&ccedil;&atilde;o j&aacute; te coloca disputando o MacBook e os planos de RenderLAB &mdash; sem custo extra.</p></div></div>
+      <div class="bonus"><div class="bi"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14M22 4L12 14.01l-3-3"/></svg></div><div><h3>Certificado de participa&ccedil;&atilde;o</h3><p>Termina o desafio com certificado pra colocar no portf&oacute;lio e no curr&iacute;culo.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOST -->
+<section class="sec" style="padding-top:30px">
+  <div class="ctn">
+    <div class="host rv">
+      <div class="host-photo"><img src="assets/img/luiz-montani.jpg" alt="Luiz Montani"></div>
+      <div class="host-body">
+        <div class="k">Quem comanda o desafio</div>
+        <h3 class="fr">Luiz Montani</h3>
+        <div class="role">Arquiteto, artista 3D e o cara que popularizou render com IA no Brasil.</div>
+        <p>Transformou visualiza&ccedil;&atilde;o 3D em neg&oacute;cio combinando render de alto padr&atilde;o com IA, e ensinou <b>mais de 10.000 pessoas</b> a fazer o mesmo &mdash; gente que come&ccedil;ou do zero e hoje atua em mais de 20 pa&iacute;ses.</p>
+        <div class="host-stats">
+          <div><div class="n">700k+</div><div class="d">seguidores</div></div>
+          <div><div class="n">100M+</div><div class="d">views</div></div>
+          <div><div class="n">10k+</div><div class="d">alunos</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="clients rv">
+      <div class="clab">&mdash; Clientes que confiam no nosso trabalho &mdash;</div>
+      <div class="clients-row">
+        <div class="client"><span class="cn">Audi do Brasil</span><span class="ch">@audibr</span></div>
+        <div class="client"><span class="cn">Pablo Mar&ccedil;al</span><span class="ch">@pablomarcal1</span></div>
+        <div class="client"><span class="cn">Dame Dream</span><span class="ch">@dame.archi</span></div>
+        <div class="client"><span class="cn">Filipo Madeira</span><span class="ch">@arquitetofilipo</span></div>
+        <div class="client"><span class="cn">Mariana Maran</span><span class="ch">@marianammaran</span></div>
+        <div class="client"><span class="cn">Rafael Fernandes</span><span class="ch">@arqrafaelfr</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA -->
+<section class="sec" id="oferta" style="padding-top:20px">
+  <div class="ctn">
+    <div class="sec-head center rv">
+      <span class="kick">A oferta</span>
+      <div class="sec-title disp">Faz a conta: tudo isso por <span class="it">R$9,90.</span></div>
+    </div>
+    <div class="offer rv"><div class="offer-in">
+      <div class="stack">
+        <div class="si"><span class="sd"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Desafio Render com IA &mdash; 2 dias ao vivo</span><span class="sv"><s>R$297</s></span></div>
+        <div class="si"><span class="sd"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Renderflix &mdash; aulas de aquecimento</span><span class="sv"><s>R$97</s></span></div>
+        <div class="si"><span class="sd"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Agentes de IA exclusivos</span><span class="sv"><s>R$97</s></span></div>
+        <div class="si"><span class="sd"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Certificado de participa&ccedil;&atilde;o</span><span class="sv"><s>R$47</s></span></div>
+        <div class="si"><span class="sd"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Concurso com MacBook + pr&ecirc;mios</span><span class="sv">incluso</span></div>
+      </div>
+      <div class="stack-tot"><span>Valor real</span><span><b>R$538</b></span></div>
+      <div class="pbox">
+        <div class="from">Lote 1, hoje, por <s>R$538</s></div>
+        <div class="big">R$9<small>,</small><span class="c">90</span></div>
+        <div class="avista">&agrave; vista &middot; pagamento &uacute;nico, sem parcelas</div>
+      </div>
+      <button class="btn btn-w" onclick="buy()"><span class="shine"></span>Garantir minha vaga agora &rarr;</button>
+      <div class="gt">pagamento &uacute;nico &middot; acesso imediato &middot; 7 dias de garantia</div>
+      <div class="lotes">
+        <div class="lote on"><span class="now">aberto agora</span><div class="ln">Lote 1</div><div class="lst">Condi&ccedil;&atilde;o de estreia</div><div class="ls">vagas limitadas</div></div>
+        <div class="lote"><div class="ln">Lote 2</div><div class="lst">Pre&ccedil;o sobe</div><div class="ls">quando o lote 1 fechar</div></div>
+        <div class="lote"><div class="ln">Lote 3</div><div class="lst">&Uacute;ltimas vagas</div><div class="ls">pre&ccedil;o mais alto</div></div>
+      </div>
+      <div class="scar">
+        <div class="bar"><div class="fill" id="scarFill"></div></div>
+        <div class="sl"><span>Lote 1 &mdash; <b id="scarPct">0%</b> preenchido</span><span><b id="scarLeft">--</b> vagas restantes</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section class="sec" style="padding-top:0">
+  <div class="ctn"><div class="guar rv">
+    <div class="gi"><svg stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <div><h3 class="fr">Risco zero: 7 dias de garantia</h3><p>Entra, participa do primeiro dia e, se n&atilde;o for pra voc&ecirc;, pede reembolso em at&eacute; 7 dias e recebe os R$9,90 de volta. O risco &eacute; todo nosso &mdash; voc&ecirc; s&oacute; tem o render a ganhar.</p></div>
+  </div></div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" style="padding-top:20px">
+  <div class="ctn">
+    <div class="sec-head center rv"><span class="kick">D&uacute;vidas</span><div class="sec-title disp">Antes de garantir sua vaga</div></div>
+    <div class="faq rv">
+      <div class="fi"><div class="fq">Preciso saber renderizar ou usar algum programa? <span class="ar">&#9660;</span></div><div class="fa"><p>N&atilde;o. O desafio foi feito pra quem come&ccedil;a do absoluto zero. Voc&ecirc; n&atilde;o vai modelar em 3D &mdash; manda uma foto ou print e a IA faz o render. A gente te guia do primeiro clique ao render final, ao vivo.</p></div></div>
+      <div class="fi"><div class="fq">Preciso de um computador potente? <span class="ar">&#9660;</span></div><div class="fa"><p>N&atilde;o. O render acontece na nuvem, com IA. Funciona at&eacute; em not&eacute;book simples &mdash; nada de PC gamer ou render farm.</p></div></div>
+      <div class="fi"><div class="fq">Vai ficar gravado? <span class="ar">&#9660;</span></div><div class="fa"><p>O ingresso normal d&aacute; direito &agrave; participa&ccedil;&atilde;o <b>ao vivo, sem grava&ccedil;&atilde;o</b>. A grava&ccedil;&atilde;o &eacute; um item &agrave; parte, que voc&ecirc; pode adquirir na pr&oacute;pria p&aacute;gina de pagamento, caso queira rever depois com calma.</p></div></div>
+      <div class="fi"><div class="fq">Como funcionam os pr&ecirc;mios? <span class="ar">&#9660;</span></div><div class="fa"><p>Voc&ecirc; cria seu render durante o desafio e sobe pro ranking. 1&ordm; lugar leva MacBook + 1 ano de RenderLAB, 2&ordm; leva 1 ano de RenderLAB e 3&ordm; leva 1 m&ecirc;s. Regras e crit&eacute;rios s&atilde;o explicados no in&iacute;cio do evento.</p></div></div>
+      <div class="fi"><div class="fq">O que &eacute; o RenderLAB? <span class="ar">&#9660;</span></div><div class="fa"><p>&Eacute; a ferramenta de IA que voc&ecirc; usa no desafio pra gerar os renders: voc&ecirc; manda um print ou foto e ela devolve um render fotorrealista em segundos, direto na nuvem &mdash; sem instalar nada pesado. Os melhores colocados ainda ganham planos do RenderLAB como pr&ecirc;mio.</p></div></div>
+      <div class="fi"><div class="fq">Qual a diferen&ccedil;a pro Vibe Render? <span class="ar">&#9660;</span></div><div class="fa"><p>O Vibe Render &eacute; um <b>minicurso r&aacute;pido</b>, gravado e direto ao ponto numa ferramenta &mdash; voc&ecirc; assiste no seu tempo. O Desafio &eacute; um <b>evento ao vivo</b>, com competi&ccedil;&atilde;o, ranking e pr&ecirc;mios, feito pra te tirar do zero criando num fim de semana.</p></div></div>
+      <div class="fi"><div class="fq">E a Forma&ccedil;&atilde;o Render.IA? <span class="ar">&#9660;</span></div><div class="fa"><p>A Forma&ccedil;&atilde;o &eacute; o programa <b>completo</b>: acompanhamento e suporte cont&iacute;nuos, muito mais conte&uacute;do, mentorias e comunidade pra voc&ecirc; virar refer&ecirc;ncia em render com IA. O Desafio &eacute; a porta de entrada &mdash; o primeiro passo, r&aacute;pido e barato, pra voc&ecirc; sentir na pele antes de ir mais fundo.</p></div></div>
+      <div class="fi"><div class="fq">R$9,90 &eacute; pegadinha? <span class="ar">&#9660;</span></div><div class="fa"><p>N&atilde;o. &Eacute; um pre&ccedil;o de lote de abertura pra encher a sala, pago &agrave; vista, uma vez s&oacute;. Quando o lote 1 fechar, o valor sobe. Sem mensalidade, sem letra mi&uacute;da.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <video id="finalVid" src="assets/video/v-final.mp4" muted loop playsinline data-para="0.16"></video>
+  <div class="final-in"><div class="ctn rv">
+    <span class="bdg bdg-live" style="margin-bottom:22px"><span class="d"></span> Lote 1 fechando &middot; o pre&ccedil;o s&oacute; sobe</span>
+    <h2 class="disp">Voc&ecirc; vai aproveitar a <span class="it">intelig&ecirc;ncia artificial</span> ou vai apenas ver outros profissionais sa&iacute;rem na sua frente?</h2>
+    <p>Enquanto voc&ecirc; pensa, tem gente fechando projeto com IA que voc&ecirc; ainda nem sabe fazer. O lote 1 some a qualquer hora, o pre&ccedil;o sobe, e o atraso s&oacute; aumenta. Por <b style="color:var(--bone)">menos que um lanche</b>, voc&ecirc; para de ficar pra tr&aacute;s hoje.</p>
+    <button class="btn btn-w" style="font-size:19px;padding:19px 44px" onclick="buy()"><span class="shine"></span>Quero minha vaga agora &middot; R$9,90 &rarr;</button>
+    <div class="gt" style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3)">&agrave; vista &middot; acesso imediato &middot; 7 dias de garantia</div>
+  </div></div>
+</section>
+
+<!-- SUPORTE WHATSAPP -->
+<section class="sec-sm">
+  <div class="ctn"><div class="support rv">
+    <div class="st">Ficou com alguma d&uacute;vida antes de entrar? <b>Fala com a gente no WhatsApp.</b></div>
+    <a class="btn btn-ghost" href="https://wa.me/5544997234024?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20Desafio%20Render%20com%20IA." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="#25D366" style="width:19px;height:19px"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.045z"/></svg>
+      Falar no WhatsApp
+    </a>
+  </div></div>
+</section>
+
+<footer>Desafio Render com IA &mdash; Montani 3D Academy &middot; <a href="#">Termos</a> &middot; <a href="#">Privacidade</a></footer>
+
+<script>
+var CHECKOUT_URL="#";
+function buy(){ if(CHECKOUT_URL&&CHECKOUT_URL!=="#"){window.location.href=CHECKOUT_URL;}else{document.getElementById('oferta').scrollIntoView({behavior:'smooth'});} }
+
+// GALERIA
+(function(){
+  var R=[['g01.jpg','Externo'],['mood-noturna.jpg','Noturna'],['g02.jpg','Interior'],['g05.jpg','Fachada'],['g03.jpg','Pessoas'],['g11.jpg','&Acirc;ngulo'],['g07.jpg','Comercial'],['mood-golden.jpg','Golden hour'],['g06.jpg','Ambiente'],['g16.jpg','Externo'],['g09.jpg','Planta'],['g08.jpg','Decora&ccedil;&atilde;o'],['g25.jpg','Cinema'],['g13.jpg','&Acirc;ngulo'],['mood-chuva.jpg','Chuva'],['g04.jpg','Pessoas'],['g10.jpg','Maquete'],['g18.jpg','Sala'],['g22.jpg','Interior'],['mood-neve.jpg','Neve'],['g14.jpg','&Acirc;ngulo'],['g26.jpg','Render'],['g20.jpg','Planta'],['mood-outono.jpg','Outono']];
+  function tile(r){return '<div class="wt" data-full="assets/img/renders/'+r[0]+'"><img src="assets/img/renders/'+r[0]+'" alt="" loading="lazy"><span class="wl">'+r[1]+'</span></div>';}
+  function fill(el,arr){var h=arr.map(tile).join('');el.innerHTML=h+h;}
+  fill(document.getElementById('wA'),R.slice(0,8));
+  fill(document.getElementById('wB'),R.slice(8,16));
+  fill(document.getElementById('wC'),R.slice(16,24));
+})();
+
+// MOOD
+(function(){
+  var imgs=document.querySelectorAll('#mood img'),names=['Golden hour','Noturna','Chuva','Neve','Outono','Primavera'],el=document.getElementById('moodN'),cur=0;
+  setInterval(function(){imgs[cur].classList.remove('on');cur=(cur+1)%imgs.length;imgs[cur].classList.add('on');el.textContent=names[cur];},2600);
+})();
+
+// BEFORE/AFTER
+function baInit(id){
+  var ba=document.getElementById(id),aw=document.getElementById(id+'aw'),hd=document.getElementById(id+'hd'),img=aw.querySelector('img');
+  function setW(){img.style.width=ba.clientWidth+'px';}
+  function move(x){var r=ba.getBoundingClientRect();var p=Math.max(4,Math.min(96,(x-r.left)/r.width*100));aw.style.width=p+'%';hd.style.left=p+'%';}
+  setW();window.addEventListener('resize',setW);var d=false;
+  ba.addEventListener('mousedown',function(e){d=true;move(e.clientX);});window.addEventListener('mousemove',function(e){if(d)move(e.clientX);});window.addEventListener('mouseup',function(){d=false;});
+  ba.addEventListener('touchstart',function(e){d=true;move(e.touches[0].clientX);},{passive:true});ba.addEventListener('touchmove',function(e){if(d)move(e.touches[0].clientX);},{passive:true});ba.addEventListener('touchend',function(){d=false;});
+}
+baInit('ba1');
+
+// VÍDEOS — toca ao entrar na viewport (robusto)
+(function(){
+  var vids=document.querySelectorAll('video');
+  function play(v){var p=v.play();if(p&&p.catch)p.catch(function(){v.addEventListener('canplay',function o(){v.removeEventListener('canplay',o);var q=v.play();if(q&&q.catch)q.catch(function(){});},{once:true});});}
+  if(!('IntersectionObserver'in window)){vids.forEach(play);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)play(e.target);else try{e.target.pause();}catch(x){}});},{threshold:.05,rootMargin:'200px 0px'});
+  vids.forEach(function(v){io.observe(v);});
+})();
+
+// COUNTDOWN + ESCASSEZ
+(function(){
+  var KEY='desafio_dl',dl=parseInt(localStorage.getItem(KEY)||'0',10),now=Date.now();
+  if(!dl||dl<now){dl=now+(5*3600+1800)*1000;localStorage.setItem(KEY,String(dl));}
+  var cd=document.getElementById('topCd');
+  function t(){var d=Math.max(0,dl-Date.now()),s=Math.floor(d/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60,p=function(n){return String(n).padStart(2,'0');};cd.innerHTML='<b>'+p(h)+'</b>:<b>'+p(m)+'</b>:<b>'+p(ss)+'</b>';}
+  t();setInterval(t,1000);
+  var pct=82+Math.floor((now/86400000)%6);if(pct>94)pct=94;var left=Math.max(7,Math.round((100-pct)*1.4));
+  setTimeout(function(){document.getElementById('scarFill').style.width=pct+'%';document.getElementById('scarPct').textContent=pct+'%';document.getElementById('scarLeft').textContent=left;},500);
+})();
+
+// FAQ
+document.querySelectorAll('.fq').forEach(function(q){q.addEventListener('click',function(){q.parentElement.classList.toggle('open');});});
+
+// REVEAL (com stagger nos filhos de grids)
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+  // stagger: filhos diretos de grids ganham delay incremental
+  document.querySelectorAll('.grid3.rv,.grid2.rv,.prize2-row.rv,.jrow.rv').forEach(function(g){
+    [].slice.call(g.children).forEach(function(c,i){c.style.transition='opacity .7s cubic-bezier(.2,.7,.2,1) '+(i*0.09)+'s, transform .7s cubic-bezier(.2,.7,.2,1) '+(i*0.09)+'s';c.style.opacity='0';c.style.transform='translateY(22px)';});
+  });
+  var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){[].slice.call(e.target.children).forEach(function(c){c.style.opacity='1';c.style.transform='none';});io2.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.grid3.rv,.grid2.rv,.prize2-row.rv,.jrow.rv').forEach(function(g){io2.observe(g);});
+})();
+
+// PROGRESSO + MACBOOK gira no scroll + PARALLAX premium
+(function(){
+  var bar=document.getElementById('prog'), mb=document.querySelector('.macbook');
+  var paras=[].slice.call(document.querySelectorAll('[data-para]'));
+  var ticking=false;
+  function frame(){
+    ticking=false;
+    var sc=window.pageYOffset||document.documentElement.scrollTop;
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    if(bar)bar.style.transform='scaleX('+(h>0?sc/h:0)+')';
+    var vh=window.innerHeight;
+    if(mb){var r=mb.getBoundingClientRect();var p=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)));mb.style.setProperty('--ry',(-68+p*136).toFixed(1)+'deg');mb.style.setProperty('--rx',(16-p*13).toFixed(1)+'deg');}
+    paras.forEach(function(el){var r=el.getBoundingClientRect();var c=(r.top+r.height/2-vh/2)/vh;var amt=parseFloat(el.getAttribute('data-para'))||0.12;el.style.transform='translate3d(0,'+(c*amt*-100).toFixed(1)+'px,0) scale(1.12)';});
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
+  window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);frame();
+})();
+
+// LIGHTBOX da galeria
+(function(){
+  var lb=document.getElementById('lb'), lbi=document.getElementById('lbImg');
+  document.querySelectorAll('.wt[data-full]').forEach(function(t){
+    t.addEventListener('click',function(){lbi.src=t.getAttribute('data-full');lb.classList.add('on');document.body.style.overflow='hidden';});
+  });
+  function close(){lb.classList.remove('on');document.body.style.overflow='';setTimeout(function(){lbi.src='';},250);}
+  lb.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+
+// SCROLL FX premium — revelação POR SCROLL (à prova de falha; nunca esconde conteúdo)
+(function(){
+  function count(el){
+    var node=el.firstChild; if(!node||node.nodeType!==3)return;
+    var txt=node.nodeValue.trim(); var m=txt.match(/^([\d.]+)(.*)$/); if(!m)return;
+    var dot=m[1].indexOf('.')>=0, target=parseInt(m[1].replace(/\./g,''),10); if(isNaN(target))return;
+    var suf=m[2], start=null, dur=1500;
+    function fmt(v){return dot?v.toLocaleString('pt-BR'):String(v);}
+    node.nodeValue='0'+suf;
+    function step(ts){if(!start)start=ts;var p=Math.min(1,(ts-start)/dur);var e=1-Math.pow(1-p,3);node.nodeValue=fmt(Math.round(target*e))+suf;if(p<1)requestAnimationFrame(step);else node.nodeValue=txt;}
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll('.sec-title').forEach(function(t){t.classList.add('fx-title');});
+  document.querySelectorAll('.jcard .jmedia, .prize2 .p2media, .card-img').forEach(function(m){m.classList.add('fx-clip');});
+  var fx=[].slice.call(document.querySelectorAll('.fx-title,.fx-clip'));
+  var nums=[].slice.call(document.querySelectorAll('.st .n,.host-stats .n'));
+  function reveal(){
+    var vh=window.innerHeight||document.documentElement.clientHeight,i,r;
+    for(i=fx.length-1;i>=0;i--){r=fx[i].getBoundingClientRect();if(r.top<vh*0.94&&r.bottom>-60){fx[i].classList.add('in');fx.splice(i,1);}}
+    for(i=nums.length-1;i>=0;i--){r=nums[i].getBoundingClientRect();if(r.top<vh*0.85&&r.bottom>0){count(nums[i]);nums.splice(i,1);}}
+  }
+  window.addEventListener('scroll',reveal,{passive:true});
+  window.addEventListener('resize',reveal);
+  reveal(); setTimeout(reveal,250); setTimeout(reveal,1000);
+  window.addEventListener('load',function(){setTimeout(reveal,150);});
+})();
+</script>
+</body>
+</html>

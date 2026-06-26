@@ -1,0 +1,7 @@
+# Cloudflare Workers (Static Assets) — deploy via `npx wrangler deploy`
+# Página 100% estática (sem worker). Os arquivos servidos ficam em ./public.
+name = "lp-desafio-render-ia"
+compatibility_date = "2026-06-25"
+
+[assets]
+directory = "./public"
