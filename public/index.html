@@ -253,10 +253,10 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 .scard .splay{position:absolute;top:18px;left:18px;z-index:3;display:flex;align-items:center;gap:8px;background:rgba(11,6,8,.55);border:1px solid var(--border);border-radius:9999px;padding:6px 13px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;backdrop-filter:blur(6px)}
 .scard .splay .d{width:6px;height:6px;border-radius:50%;background:var(--wine-b);box-shadow:0 0 9px var(--wine-b)}
 @media(max-width:920px){
-  .scard{position:relative;top:auto;margin-bottom:18px}
+  .scard{top:calc(78px + var(--i,0)*12px);margin-bottom:24px}
   .scard-in{grid-template-columns:1fr}
   .scard.rev .scard-media{order:0}
-  .scard-media{min-height:230px}
+  .scard-media{min-height:240px}
   .scard-body{padding:32px 28px}
 }
 
@@ -287,6 +287,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(15,9,11,.72);backdrop-filte
 .macbook{position:relative;width:440px;max-width:92%;transform-style:preserve-3d;transform:rotateX(var(--rx,10deg)) rotateY(var(--ry,-40deg));will-change:transform;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
 .mb-screen{position:relative;width:100%;aspect-ratio:16/10;background:#0a0608;border:9px solid #170a0d;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(200,169,106,.2);overflow:hidden}
 .mb-screen video,.mb-screen img{width:100%;height:100%;object-fit:cover}
+.mb-screen .mb-still{display:none}
 .mb-screen .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:58px;height:7px;background:#170a0d;border-radius:0 0 6px 6px;z-index:3}
 .mb-screen .glare{position:absolute;inset:0;background:linear-gradient(118deg,rgba(255,255,255,.1),transparent 38%);pointer-events:none;z-index:2}
 .mb-base{width:116%;margin-left:-8%;height:15px;background:linear-gradient(180deg,#3a2024,#170a0d);border-radius:2px 2px 11px 11px;box-shadow:0 22px 34px rgba(0,0,0,.55)}
@@ -443,12 +444,15 @@ footer a{color:var(--wine-b)}
   .lotes{grid-template-columns:1fr}
   .host{grid-template-columns:1fr}.host-photo{aspect-ratio:16/10}.host-photo::after{background:linear-gradient(0deg,var(--bg2),transparent 60%)}.host-body{padding:0 30px 34px}
   .guar{flex-direction:column;text-align:center}
-  /* MacBook sem 3D no mobile — vídeo some dentro de transform 3D no iOS Safari */
-  .mbstage{perspective:none;min-height:auto;padding-bottom:4px}
-  .macbook{transform:none!important;transform-style:flat;width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+  /* MacBook mantém o giro 3D no mobile; mostra imagem na tela (vídeo some dentro de transform 3D no iOS) */
+  .mbstage{min-height:auto;padding-bottom:4px}
+  .macbook{width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+  .mb-screen video{display:none}
+  .mb-screen .mb-still{display:block}
 }
 @media(max-width:560px){
-  .ctn,.ctn-wide{padding:0 18px}.sec{padding:54px 0}.sec-head,.sec-head.center{margin-bottom:40px}
+  .ctn,.ctn-wide{padding:0 22px}.sec{padding:54px 0}.sec-head,.sec-head.center{margin-bottom:40px}
+  .nav-in{padding:11px 16px}.nav-cta{padding:9px 13px;font-size:12.5px}.logo .l1{font-size:23px}
   .hero-in{padding:28px 0 46px}
   .hero h1{font-size:clamp(29px,8.4vw,42px);line-height:1.04}
   .hero-sub{font-size:15px}.hero-meta{font-size:11.5px}
@@ -483,7 +487,7 @@ footer a{color:var(--wine-b)}
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"><video id="heroVid" src="assets/video/v-hero.mp4" autoplay muted loop playsinline></video></div>
+  <div class="hero-bg"><video poster="assets/img/posters/v-hero.jpg" id="heroVid" src="assets/video/v-hero.mp4" autoplay muted loop playsinline></video></div>
   <div class="ctn hero-in">
     <div class="hero-head rv">
       <div class="eg">
@@ -529,7 +533,7 @@ footer a{color:var(--wine-b)}
 
 <!-- REEL full-bleed -->
 <section class="reel">
-  <video id="reelVid" src="assets/video/v-reel1.mp4" muted loop playsinline data-para="0.16"></video>
+  <video poster="assets/img/posters/v-reel1.jpg" id="reelVid" src="assets/video/v-reel1.mp4" muted loop playsinline data-para="0.16"></video>
   <div class="reel-c rv">
     <span class="kick" style="color:var(--rose)">Olha o n&iacute;vel</span>
     <h2 class="disp">Tudo isso &eacute; <span class="it">IA</span>. Voc&ecirc; vai criar igual.</h2>
@@ -604,7 +608,7 @@ footer a{color:var(--wine-b)}
       </div>
       <div class="mbstage">
         <div class="macbook">
-          <div class="mb-screen"><span class="notch"></span><span class="glare"></span><video src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
+          <div class="mb-screen"><span class="notch"></span><span class="glare"></span><video poster="assets/img/posters/renderlab-ui.jpg" src="assets/video/renderlab-ui.mp4" muted loop playsinline></video><img class="mb-still" src="assets/img/posters/renderlab-ui.jpg" alt="render gerado com IA"></div>
           <div class="mb-base"></div>
         </div>
       </div>
@@ -612,11 +616,11 @@ footer a{color:var(--wine-b)}
     <!-- 2º e 3º -->
     <div class="prize2-row rv">
       <div class="prize2">
-        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">2&ordm;</span><video src="assets/video/renderlab-vert.mp4" muted loop playsinline></video></div>
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">2&ordm;</span><video poster="assets/img/posters/renderlab-vert.jpg" src="assets/video/renderlab-vert.mp4" muted loop playsinline></video></div>
         <div class="p2body"><div class="p2l">2&ordm; lugar</div><h3>1 ano de RenderLAB gr&aacute;tis</h3><p>O segundo melhor render leva um ano inteiro de RenderLAB pra continuar criando sem parar.</p></div>
       </div>
       <div class="prize2">
-        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">3&ordm;</span><video src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
+        <div class="p2media"><img class="p2rl" src="assets/img/logo-renderlab.png" alt="RenderLAB"><span class="p2pos">3&ordm;</span><video poster="assets/img/posters/renderlab-ui.jpg" src="assets/video/renderlab-ui.mp4" muted loop playsinline></video></div>
         <div class="p2body"><div class="p2l">3&ordm; lugar</div><h3>1 m&ecirc;s de RenderLAB gr&aacute;tis</h3><p>O terceiro lugar ganha um m&ecirc;s completo de RenderLAB pra emendar direto depois do desafio.</p></div>
       </div>
     </div>
@@ -633,7 +637,7 @@ footer a{color:var(--wine-b)}
     </div>
     <div class="jrow rv">
       <div class="jcard">
-        <div class="jmedia"><span class="jn">01</span><video src="assets/video/v-reel4.mp4" muted loop playsinline></video></div>
+        <div class="jmedia"><span class="jn">01</span><video poster="assets/img/posters/v-reel4.jpg" src="assets/video/v-reel4.mp4" muted loop playsinline></video></div>
         <div class="jbody">
           <div class="jt">S&aacute;bado &middot; 1 de agosto</div>
           <h3>Seu primeiro render</h3>
@@ -645,7 +649,7 @@ footer a{color:var(--wine-b)}
         </div>
       </div>
       <div class="jcard">
-        <div class="jmedia"><span class="jn">02</span><video src="assets/video/v-reel2.mp4" muted loop playsinline></video></div>
+        <div class="jmedia"><span class="jn">02</span><video poster="assets/img/posters/v-reel2.jpg" src="assets/video/v-reel2.mp4" muted loop playsinline></video></div>
         <div class="jbody">
           <div class="jt">Domingo &middot; 2 de agosto</div>
           <h3>N&iacute;vel profissional</h3>
@@ -679,19 +683,19 @@ footer a{color:var(--wine-b)}
   <div class="ctn learn rv">
     <div class="scard" style="--i:0">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/w-print.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> render com IA</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/w-print.jpg" src="assets/video/w-print.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> render com IA</div></div>
         <div class="scard-body"><div class="sn">01</div><div class="stag">A base de tudo</div><h3>Transforme um print em <span class="it">render</span></h3><p>Manda uma foto, um print do seu projeto ou um rascunho simples e a IA devolve um render fotorrealista em segundos. &Eacute; por aqui que voc&ecirc; come&ccedil;a &mdash; mesmo sem nunca ter tocado em IA.</p></div>
       </div>
     </div>
     <div class="scard rev" style="--i:1">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/w-cenas.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> gerado com IA</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/w-cenas.jpg" src="assets/video/w-cenas.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> gerado com IA</div></div>
         <div class="scard-body"><div class="sn">02</div><div class="stag">Composi&ccedil;&atilde;o</div><h3>Monte cenas que parecem <span class="it">foto</span></h3><p>Componha ambientes do zero &mdash; m&oacute;veis, materiais, pessoas e contexto &mdash; e construa cenas completas que enganam o olho. Sem modelar nada em 3D.</p></div>
       </div>
     </div>
     <div class="scard" style="--i:2">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/w-mood.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> mesma cena, outro clima</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/w-mood.jpg" src="assets/video/w-mood.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> mesma cena, outro clima</div></div>
         <div class="scard-body"><div class="sn">03</div><div class="stag">Atmosfera</div><h3>Troque o <span class="it-c">clima</span> com um clique</h3><p>Golden hour, noite, chuva, neve, primavera &mdash; a mesma cena em qualquer atmosfera, na hora. &Eacute; o controle que faz o cliente dizer "&eacute; exatamente isso".</p></div>
       </div>
     </div>
@@ -709,19 +713,19 @@ footer a{color:var(--wine-b)}
     </div>
     <div class="scard rev" style="--i:5">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/v-final.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> timelapse com IA</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/v-final.jpg" src="assets/video/v-final.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> timelapse com IA</div></div>
         <div class="scard-body"><div class="sn">06</div><div class="stag">Tempo</div><h3>Timelapse de obra em <span class="it">segundos</span></h3><p>Mostre a obra evoluindo, do terreno ao projeto pronto, num timelapse que impressiona &mdash; gerado pela IA, sem filmar nada.</p></div>
       </div>
     </div>
     <div class="scard" style="--i:6">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/w-loteamento.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> vista a&eacute;rea com IA</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/w-loteamento.jpg" src="assets/video/w-loteamento.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> vista a&eacute;rea com IA</div></div>
         <div class="scard-body"><div class="sn">07</div><div class="stag">Vista a&eacute;rea</div><h3>Mostre o <span class="it">empreendimento</span> inteiro</h3><p>Crie vistas a&eacute;reas e criativos de loteamento que mostram o projeto todo de tirar o f&ocirc;lego &mdash; o tipo de imagem que impressiona na hora.</p></div>
       </div>
     </div>
     <div class="scard rev" style="--i:7">
       <div class="scard-in">
-        <div class="scard-media"><video src="assets/video/w-narrativa.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> v&iacute;deo gerado com IA</div></div>
+        <div class="scard-media"><video poster="assets/img/posters/w-narrativa.jpg" src="assets/video/w-narrativa.mp4" muted loop playsinline></video><div class="splay"><span class="d"></span> v&iacute;deo gerado com IA</div></div>
         <div class="scard-body"><div class="sn">08</div><div class="stag">Movimento</div><h3>V&iacute;deo de <span class="it">cinema</span>, sem editor</h3><p>Transforme o render num v&iacute;deo cinematogr&aacute;fico com movimento de c&acirc;mera e narrativa, pronto pra apresentar &mdash; sem abrir nenhum editor de v&iacute;deo.</p></div>
       </div>
     </div>
@@ -865,7 +869,7 @@ footer a{color:var(--wine-b)}
 
 <!-- FINAL -->
 <section class="final">
-  <video id="finalVid" src="assets/video/v-final.mp4" muted loop playsinline data-para="0.16"></video>
+  <video poster="assets/img/posters/v-final.jpg" id="finalVid" src="assets/video/v-final.mp4" muted loop playsinline data-para="0.16"></video>
   <div class="final-in"><div class="ctn rv">
     <span class="bdg bdg-live" style="margin-bottom:22px"><span class="d"></span> Lote 1 fechando &middot; o pre&ccedil;o s&oacute; sobe</span>
     <h2 class="disp">Voc&ecirc; vai aproveitar a <span class="it">intelig&ecirc;ncia artificial</span> ou vai apenas ver outros profissionais sa&iacute;rem na sua frente?</h2>
@@ -965,7 +969,7 @@ document.querySelectorAll('.fq').forEach(function(q){q.addEventListener('click',
     var h=document.documentElement.scrollHeight-window.innerHeight;
     if(bar)bar.style.transform='scaleX('+(h>0?sc/h:0)+')';
     var vh=window.innerHeight;
-    if(mb){var r=mb.getBoundingClientRect();var p=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)));mb.style.setProperty('--ry',(-68+p*136).toFixed(1)+'deg');mb.style.setProperty('--rx',(16-p*13).toFixed(1)+'deg');}
+    if(mb){var r=mb.getBoundingClientRect();var p=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)));var amp=window.innerWidth<=920?32:68;mb.style.setProperty('--ry',(-amp+p*amp*2).toFixed(1)+'deg');mb.style.setProperty('--rx',(16-p*13).toFixed(1)+'deg');}
     paras.forEach(function(el){var r=el.getBoundingClientRect();var c=(r.top+r.height/2-vh/2)/vh;var amt=parseFloat(el.getAttribute('data-para'))||0.12;el.style.transform='translate3d(0,'+(c*amt*-100).toFixed(1)+'px,0) scale(1.12)';});
   }
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
@@ -996,7 +1000,7 @@ document.querySelectorAll('.fq').forEach(function(q){q.addEventListener('click',
     requestAnimationFrame(step);
   }
   document.querySelectorAll('.sec-title').forEach(function(t){t.classList.add('fx-title');});
-  document.querySelectorAll('.jcard .jmedia, .prize2 .p2media, .card-img').forEach(function(m){m.classList.add('fx-clip');});
+  document.querySelectorAll('.card-img').forEach(function(m){m.classList.add('fx-clip');});
   var fx=[].slice.call(document.querySelectorAll('.fx-title,.fx-clip'));
   var nums=[].slice.call(document.querySelectorAll('.st .n,.host-stats .n'));
   function reveal(){
