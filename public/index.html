@@ -79,8 +79,11 @@ h3{font-family:'Fraunces',serif;font-weight:700}
 
 /* botões */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;padding:16px 30px;border-radius:9999px;border:none;cursor:pointer;transition:transform .16s,box-shadow .16s;position:relative;overflow:hidden}
-.btn-w{background:linear-gradient(120deg,var(--wine-b),var(--wine-d));color:#fff;box-shadow:0 14px 38px rgba(155,34,51,.4)}
-.btn-w:hover{transform:translateY(-2px);box-shadow:0 22px 54px rgba(192,57,74,.5)}
+.btn-w{background:linear-gradient(120deg,#ff4d5f,#e11d36 48%,#b3122a);background-size:220% 100%;color:#fff;animation:ctaPulse 2.2s ease-in-out infinite,ctaShift 5s linear infinite}
+.btn-w:hover{transform:translateY(-2px) scale(1.03)}
+@keyframes ctaPulse{0%,100%{box-shadow:0 12px 36px rgba(225,29,54,.5),0 0 0 0 rgba(255,77,95,.55)}50%{box-shadow:0 18px 50px rgba(255,77,95,.65),0 0 0 13px rgba(255,77,95,0)}}
+@keyframes ctaShift{to{background-position:220% 0}}
+@media(prefers-reduced-motion:reduce){.btn-w{animation:none;box-shadow:0 14px 38px rgba(225,29,54,.5)}}
 .btn-w .sub{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;opacity:.9}
 .midcta-wrap{padding:10px 0 2px}
 .midcta{display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px;padding:38px 30px;border-radius:24px;border:1px solid var(--border-w);background:linear-gradient(180deg,rgba(155,34,51,.1),rgba(11,6,8,.18))}
@@ -89,8 +92,8 @@ h3{font-family:'Fraunces',serif;font-weight:700}
 .midcta-note{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--text3)}
 .btn-bone{background:var(--bone);color:#1a0e11}
 .btn-bone:hover{transform:translateY(-2px)}
-.shine{position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:shine 4.5s ease-in-out infinite}
-@keyframes shine{0%,72%{left:-60%}88%,100%{left:130%}}
+.shine{position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:shine 3s ease-in-out infinite}
+@keyframes shine{0%,62%{left:-65%}82%,100%{left:135%}}
 
 /* topbar escassez */
 .topbar{background:linear-gradient(90deg,var(--wine-d),var(--wine),var(--wine-d));color:#fff;text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;position:relative;z-index:60}
