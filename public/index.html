@@ -82,6 +82,11 @@ h3{font-family:'Fraunces',serif;font-weight:700}
 .btn-w{background:linear-gradient(120deg,var(--wine-b),var(--wine-d));color:#fff;box-shadow:0 14px 38px rgba(155,34,51,.4)}
 .btn-w:hover{transform:translateY(-2px);box-shadow:0 22px 54px rgba(192,57,74,.5)}
 .btn-w .sub{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;opacity:.9}
+.midcta-wrap{padding:10px 0 2px}
+.midcta{display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px;padding:38px 30px;border-radius:24px;border:1px solid var(--border-w);background:linear-gradient(180deg,rgba(155,34,51,.1),rgba(11,6,8,.18))}
+.midcta-h{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(22px,3.4vw,30px);line-height:1.08;color:var(--bone);max-width:18ch}
+.midcta-h .it{font-style:italic;color:var(--wine-b)}
+.midcta-note{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--text3)}
 .btn-bone{background:var(--bone);color:#1a0e11}
 .btn-bone:hover{transform:translateY(-2px)}
 .shine{position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:shine 4.5s ease-in-out infinite}
@@ -557,6 +562,13 @@ footer a{color:var(--wine-b)}
   <p class="gallery-hint rv"><svg stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg> <b>clique em qualquer render</b> pra ampliar e ver em alta resolu&ccedil;&atilde;o</p>
 </section>
 
+<!-- CTA intermediário · galeria -->
+<div class="midcta-wrap"><div class="ctn"><div class="midcta rv">
+  <h3 class="midcta-h">Renders desse n&iacute;vel saindo do <span class="it">seu</span> computador.</h3>
+  <button class="btn btn-w" style="font-size:17px;padding:17px 40px" onclick="buy()"><span class="shine"></span>Garantir minha vaga &middot; R$9,90 &rarr;</button>
+  <span class="midcta-note">Lote 1 &middot; acesso imediato &middot; vagas limitadas</span>
+</div></div></div>
+
 <!-- ANTES/DEPOIS + MOOD (editorial split) -->
 <section class="sec">
   <div class="ctn split">
@@ -628,6 +640,13 @@ footer a{color:var(--wine-b)}
     </div>
   </div>
 </section>
+
+<!-- CTA intermediário · prêmios -->
+<div class="midcta-wrap"><div class="ctn"><div class="midcta rv">
+  <h3 class="midcta-h">O melhor render leva o <span class="it">MacBook</span>. Sua vaga come&ccedil;a aqui.</h3>
+  <button class="btn btn-w" style="font-size:17px;padding:17px 40px" onclick="buy()"><span class="shine"></span>Entrar no desafio &middot; R$9,90 &rarr;</button>
+  <span class="midcta-note">1&ordm; lugar leva MacBook + 1 ano de RenderLAB</span>
+</div></div></div>
 
 <!-- JOURNEY 2 dias -->
 <section class="sec" style="padding-top:30px">
@@ -745,6 +764,13 @@ footer a{color:var(--wine-b)}
     </div>
   </div>
 </section>
+
+<!-- CTA intermediário · grade -->
+<div class="midcta-wrap"><div class="ctn"><div class="midcta rv">
+  <h3 class="midcta-h">Do print ao v&iacute;deo de cinema &mdash; em um <span class="it">fim de semana</span>.</h3>
+  <button class="btn btn-w" style="font-size:17px;padding:17px 40px" onclick="buy()"><span class="shine"></span>Quero minha vaga &middot; R$9,90 &rarr;</button>
+  <span class="midcta-note">10 entregas, ao vivo &middot; do zero</span>
+</div></div></div>
 
 <!-- PRA QUEM -->
 <section class="sec" style="padding-top:30px">
