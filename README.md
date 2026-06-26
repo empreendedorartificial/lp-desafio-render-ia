@@ -34,7 +34,8 @@ public/
 
 - **Checkout** — `CHECKOUT_URL` no `<script>` está `"#"` (os CTAs rolam pra oferta). Plugar a URL do Hotmart do Desafio.
 - **Depoimentos** — seção ainda não montada; precisa do texto/prints dos depoimentos do workshop.
-- **OG / favicon** — adicionar card de prévia (og:image 1200×630) e favicon.
+
+> OG (`assets/img/og-desafio.jpg`, 1200×630) e favicon (marca "D" vinho) já feitos. Após publicar, rodar o [Sharing Debugger da Meta](https://developers.facebook.com/tools/debug/) ("Scrape Again") pra limpar o cache da prévia.
 
 ## Prêmios / ranking
 
